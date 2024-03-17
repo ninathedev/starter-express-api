@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-    res.sendFile('./public/mainPage/index.js');
+    res.sendFile('./public/mainPage/index.html', { root: __dirname });
 });
 
 app.listen(8080, () => {
