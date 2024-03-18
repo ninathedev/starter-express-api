@@ -1,5 +1,3 @@
-// accid: TUFDSElDQQ==
-// pin:   VEFGQUxMQQ==
 
 const express = require('express');
 const app = express();
@@ -10,28 +8,28 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-    if (req.body.fHeusGF === 'TUFDSElDQQ==') {
+    // If person is in admin mode
+    if (req.body.fHeusGF === 'TUFDSElDQQ==' && req.body.hDjeRfg === 'VEFGQUxMQQ==') {
 
-    }
-    const con = mysql.createConnection({
-        host: 'emerald-free.falixserver.net:3306',
-        user: 'u1332246_4Ign2Pc0qA',
-        password: '4fcSn+h8ZL71lLSdHT8d^5H+',
-        database: 's1332246_27f8817bffaf'
-    });
-    con.connect(function(err) {
-        if (err) throw err;
-        // id = ${fHeusGF}
-        // pin = ${hDjeRfg}
-        var sql = ``;
-
-        con.query(sql, function (err, result) {
-            if (err) app.send(err);
-            app.send("done")
+    } else {
+        const con = mysql.createConnection({
+            host: 'emerald-free.falixserver.net:3306',
+            user: 'u1332246_4Ign2Pc0qA',
+            password: '4fcSn+h8ZL71lLSdHT8d^5H+',
+            database: 's1332246_27f8817bffaf'
         });
-    });
-
-
+        con.connect(function(err) {
+            if (err) throw err;
+            // id = ${fHeusGF}
+            // pin = ${hDjeRfg}
+            var sql = ``;
+    
+            con.query(sql, function (err, result) {
+                if (err) app.send(err);
+                app.send("done")
+            });
+        });
+    }
 })
 
 app.post('/surequest', (req, res) => {
@@ -86,15 +84,6 @@ app.post('/mysql', (req, res) => {
         });
     });
 })
-
-app.use(helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        connectSrc: ["'self'", 'http://127.0.0.1:8080', 'ws://localhost:42877/']
-      }
-    }
-}));
 
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
