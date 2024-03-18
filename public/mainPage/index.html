@@ -2,23 +2,23 @@
 <html>
   <head>
     <title>GABank</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
   </head>
   <body>
-    <script src="index.js"></script>
+    <script src="/scripts/mindex.js"></script>
     <h1>Welcome to GABank!</h1>
     <h2>Log in</h2>
     <form action="login" method="get">
       <input type="text" name="fHeusGF" placeholder="Account No.">
       <input type="password" name="hDjeRfg" placeholder="PIN">
-      <input type="submit" value="Log in" onclick="loginRequest()">
+      <input type="button" value="Log in" onclick="loginRequest();return false">
     </form>
     <br>
     <h2>Sign up</h2>
     <form action="signup" method="post">
       <input type="text" name="LkaPrehH" placeholder="Full Name">
       <input type="text" name="DHrEjfF" placeholder="Age">
-      <input type="submit" value="Sign up" onclick="signupRequest()">
+      <input type="button" value="Sign up" onclick="signupRequest();return false">
     </form>
   </body>
 </html>

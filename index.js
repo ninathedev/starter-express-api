@@ -7,10 +7,17 @@ app.get('/', (req, res) => {
     res.sendFile('./public/mainPage/index.html', { root: __dirname });
 });
 
+app.get('/scripts/mindex.js', (req, res) => {
+    res.sendFile('./scripts/mindex.js', { root: __dirname });
+});
+app.get('/scripts/aindex.js', (req, res) => {
+    res.sendFile('./scripts/aindex.js', { root: __dirname });
+});
+
 app.get('/login', (req, res) => {
     // If person is in admin mode
-    if (req.body.fHeusGF === 'TUFDSElDQQ==' && req.body.hDjeRfg === 'VEFGQUxMQQ==') {
-
+    if (req.body.fHeusGF === 'TUFDSElDQQ==VEFGQUxMQQ==' && req.body.hDjeRfg === '111710') {
+        res.sendFile('./public/admin/index.html', { root: __dirname });
     } else {
         const con = mysql.createConnection({
             host: 'emerald-free.falixserver.net:3306',
@@ -22,9 +29,12 @@ app.get('/login', (req, res) => {
             if (err) throw err;
             // id = ${fHeusGF}
             // pin = ${hDjeRfg}
-            var sql = ``;
+            var sql = `SELECT * FROM accounts WHERE id = ${req.body.fHeusGF} AND pin = ${req.body.hDjeRfg}`;
     
             con.query(sql, function (err, result) {
+                if (result === undefined) {
+                    app.send("Invalid ID or PIN")
+                }
                 if (err) app.send(err);
                 app.send("done")
             });
