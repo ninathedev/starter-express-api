@@ -14,7 +14,7 @@ app.get('/scripts/aindex.js', (req, res) => {
     res.sendFile('./scripts/aindex.js', { root: __dirname });
 });
 
-app.get('/login', (req, res) => {
+app.get('/dashboard', (req, res) => {
     // If person is in admin mode
     if (req.body.fHeusGF === 'TUFDSElDQQ==VEFGQUxMQQ==' && req.body.hDjeRfg === '111710') {
         res.sendFile('./public/admin/index.html', { root: __dirname });
@@ -27,6 +27,7 @@ app.get('/login', (req, res) => {
         });
         con.connect(function(err) {
             if (err) throw err;
+            // For secrurity purposes, we use randomized variable names.
             // id = ${fHeusGF}
             // pin = ${hDjeRfg}
             var sql = `SELECT * FROM accounts WHERE id = ${req.body.fHeusGF} AND pin = ${req.body.hDjeRfg}`;
@@ -41,24 +42,6 @@ app.get('/login', (req, res) => {
         });
     }
 })
-
-app.post('/surequest', (req, res) => {
-    const con = mysql.createConnection({
-        host: 'emerald-free.falixserver.net:3306',
-        user: 'u1332246_4Ign2Pc0qA',
-        password: '4fcSn+h8ZL71lLSdHT8d^5H+',
-        database: 's1332246_27f8817bffaf'
-    });
-    con.connect(function(err) {
-        if (err) throw err;
-        var sql = `INSERT INTO signupRequest (name, age, code) VALUES (${req.body.LkaPrehH}, ${req.body.DHrEjfF}, ${req.body.code})`;
-
-        con.query(sql, function (err, result) {
-            if (err) app.send(err);
-            app.send("done")
-        });
-    });
-});
 
 app.get('/secrets/secret/accounts' , (req, res) => {
     const con = mysql.createConnection({
