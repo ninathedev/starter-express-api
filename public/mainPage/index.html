@@ -2,7 +2,48 @@
 <html>
   <head>
     <title>GABank</title>
-    <link rel="stylesheet" href="./style.css">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1, h2 {
+        text-align: center;
+        color: #333;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      input[type="text"], input[type="password"] {
+        width: 200px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      input[type="button"] {
+        width: 100px;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      input[type="button"]:hover {
+        background-color: #45a049;
+      }
+    </style>
   </head>
   <body>
     <script src="/scripts/mindex.js"></script>
@@ -12,13 +53,6 @@
       <input type="text" name="fHeusGF" placeholder="Account No.">
       <input type="password" name="hDjeRfg" placeholder="PIN">
       <input type="button" value="Log in" onclick="loginRequest();return false">
-    </form>
-    <br>
-    <h2>Sign up</h2>
-    <form action="signup" method="post">
-      <input type="text" name="LkaPrehH" placeholder="Full Name">
-      <input type="text" name="DHrEjfF" placeholder="Age">
-      <input type="button" value="Sign up" onclick="signupRequest();return false">
     </form>
   </body>
 </html>
