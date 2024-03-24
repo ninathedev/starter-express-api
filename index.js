@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql');
 
+app.use(express.json()); 
+
 app.get('/', (req, res) => {
     res.sendFile('./public/mainPage/index.html', { root: __dirname });
 });
@@ -20,7 +22,7 @@ app.get('/dashboard', (req, res) => {
         res.sendFile('./public/admin/index.html', { root: __dirname });
     } else {
         const con = mysql.createConnection({
-            host: 'emerald-free.falixserver.net:3306',
+            host: '104.234.220.50',
             user: 'u1332246_4Ign2Pc0qA',
             password: '4fcSn+h8ZL71lLSdHT8d^5H+',
             database: 's1332246_27f8817bffaf'
@@ -33,11 +35,11 @@ app.get('/dashboard', (req, res) => {
             var sql = `SELECT * FROM accounts WHERE id = ${req.body.fHeusGF} AND pin = ${req.body.hDjeRfg}`;
     
             con.query(sql, function (err, result) {
-                if (result === undefined) {
-                    app.send("Invalid ID or PIN")
+                if (result[0] === undefined) {
+                    res.send("Invalid ID or PIN")
                 }
                 if (err) app.send(err);
-                app.send("done")
+                res.send("done")
             });
         });
     }
@@ -45,7 +47,7 @@ app.get('/dashboard', (req, res) => {
 
 app.get('/secrets/secret/accounts' , (req, res) => {
     const con = mysql.createConnection({
-        host: 'emerald-free.falixserver.net:3306',
+        host: '104.234.220.50',
         user: 'u1332246_4Ign2Pc0qA',
         password: '4fcSn+h8ZL71lLSdHT8d^5H+',
         database: 's1332246_27f8817bffaf'
@@ -56,24 +58,24 @@ app.get('/secrets/secret/accounts' , (req, res) => {
 
         con.query(sql, function (err, result) {
             if (err) app.send(err);
-            app.send(result)
+            res.send(result)
         });
     });
 })
 
 app.post('/mysql', (req, res) => {
     const con = mysql.createConnection({
-        host: 'emerald-free.falixserver.net:3306',
+        host: '104.234.220.50',
         user: 'u1332246_4Ign2Pc0qA',
         password: '4fcSn+h8ZL71lLSdHT8d^5H+',
         database: 's1332246_27f8817bffaf'
     });
     con.connect(function(err) {
-        if (err) throw err;
+        if (err) console.log(err);
         var sql = req.body.sql;
         con.query(sql, function (err, result) {
-            if (err) app.send(err);
-            app.send(result);
+            if (err) res.status(500).send(err);
+            res.send(result);
         });
     });
 })
