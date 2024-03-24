@@ -31,7 +31,7 @@ app.get('/dashboard', (req, res) => {
       // For secrurity purposes, we use randomized variable names.
       // id = ${fHeusGF}
       // pin = ${hDjeRfg}
-      var sql = `SELECT * FROM accounts WHERE id = ${req.body.fHeusGF} AND pin = ${req.body.hDjeRfg}`;
+      const sql = `SELECT * FROM accounts WHERE id = ${req.body.fHeusGF} AND pin = ${req.body.hDjeRfg}`;
 
       con.query(sql, function(err, result) {
         if (result[0] === undefined) {
@@ -53,7 +53,7 @@ app.get('/secrets/secret/accounts', (req, res) => {
   });
   con.connect(function(err) {
     if (err) throw err;
-    var sql = `SELECT * FROM signupRequest`;
+    const sql = `SELECT * FROM accounts`;
 
     con.query(sql, function(err, result) {
       if (err) app.send(err);
@@ -71,7 +71,7 @@ app.post('/mysql', (req, res) => {
   });
   con.connect(function(err) {
     if (err) console.log(err);
-    var sql = req.body.sql;
+    const sql = req.body.sql;
     con.query(sql, function(err, result) {
       if (err) res.status(500).send(err);
       res.send(result);
