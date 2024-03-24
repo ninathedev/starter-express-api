@@ -14,8 +14,15 @@ app.get('/scripts/mindex.js', (req, res) => {
 app.get('/scripts/aindex.js', (req, res) => {
   res.sendFile('./scripts/aindex.js', {root: __dirname});
 });
+app.get('/scripts/dindex.js', (req, res) => {
+  res.sendFile('./scripts/dindex.js', {root: __dirname});
+});
 
 app.get('/dashboard', (req, res) => {
+  res.sendFile('./public/dashboard/index.html', {root: __dirname});
+})
+
+app.get('/login', (req, res) => {
   // If person is in admin mode
   if (req.body.fHeusGF === 'TUFDSElDQQ==VEFGQUxMQQ==' && req.body.hDjeRfg === '111710') {
     res.sendFile('./public/admin/index.html', {root: __dirname});
@@ -35,10 +42,10 @@ app.get('/dashboard', (req, res) => {
 
       con.query(sql, function(err, result) {
         if (result[0] === undefined) {
-          res.send("Invalid ID or PIN")
+          res.status(404);
         }
         if (err) app.send(err);
-        res.send("done")
+        res.status(200);
       });
     });
   }
