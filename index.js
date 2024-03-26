@@ -1,4 +1,7 @@
 /* eslint-disable no-unused-vars */
+
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 const mysql = require('mysql');
@@ -21,10 +24,10 @@ app.get('/scripts/dindex.js', (req, res) => {
 
 app.get('/money', (req, res) => {
 	const con = mysql.createConnection({
-		host: '104.234.220.50',
-		user: 'u1332246_4Ign2Pc0qA',
-		password: '4fcSn+h8ZL71lLSdHT8d^5H+',
-		database: 's1332246_27f8817bffaf'
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
 	});
 
 	con.connect(function(err) {
@@ -39,10 +42,10 @@ app.get('/money', (req, res) => {
 
 app.get('/accounts', (req, res) => {
 	const con = mysql.createConnection({
-		host: '104.234.220.50',
-		user: 'u1332246_4Ign2Pc0qA',
-		password: '4fcSn+h8ZL71lLSdHT8d^5H+',
-		database: 's1332246_27f8817bffaf'
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
 	});
 
 	con.connect(function(err) {
@@ -57,10 +60,10 @@ app.get('/accounts', (req, res) => {
 
 app.put('/salary', (req, res) => {
 	const con = mysql.createConnection({
-		host: '104.234.220.50',
-		user: 'u1332246_4Ign2Pc0qA',
-		password: '4fcSn+h8ZL71lLSdHT8d^5H+',
-		database: 's1332246_27f8817bffaf'
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
 	});
 
 	con.connect(function(err) {
@@ -79,10 +82,10 @@ app.get('/dashboard', (req, res) => {
 
 app.put('/tax', (req, res) => {
 	const con = mysql.createConnection({
-		host: '104.234.220.50',
-		user: 'u1332246_4Ign2Pc0qA',
-		password: '4fcSn+h8ZL71lLSdHT8d^5H+',
-		database: 's1332246_27f8817bffaf'
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
 	});
 
 	con.connect(function(err) {
@@ -103,10 +106,10 @@ app.post('/login', (req, res) => {
 		res.sendFile('./public/admin/index.html', {root: __dirname});
 	} else {
 		const con = mysql.createConnection({
-			host: '104.234.220.50',
-			user: 'u1332246_4Ign2Pc0qA',
-			password: '4fcSn+h8ZL71lLSdHT8d^5H+',
-			database: 's1332246_27f8817bffaf'
+			host: process.env.MYSQLIP,
+			user: process.env.MYSQLUSER,
+			password: process.env.MYSQLPW,
+			database: process.env.MYSQLDB
 		});
 		con.connect(function(err) {
 			if (err) throw err;
@@ -140,10 +143,10 @@ app.get('/500', (req, res) => {
 
 app.post('/mysql', (req, res) => {
 	const con = mysql.createConnection({
-		host: '104.234.220.50',
-		user: 'u1332246_4Ign2Pc0qA',
-		password: '4fcSn+h8ZL71lLSdHT8d^5H+',
-		database: 's1332246_27f8817bffaf'
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
 	});
 	con.connect(function(err) {
 		if (err) console.log(err);
