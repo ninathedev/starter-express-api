@@ -22,6 +22,24 @@ app.get('/dashboard', (req, res) => {
   res.sendFile('./public/dashboard/index.html', {root: __dirname});
 })
 
+app.put('/tax', (req, res) => {
+  const con = mysql.createConnection({
+    host: '104.234.220.50',
+    user: 'u1332246_4Ign2Pc0qA',
+    password: '4fcSn+h8ZL71lLSdHT8d^5H+',
+    database: 's1332246_27f8817bffaf'
+  });
+
+  con.connect(function(err) {
+    if (err) throw err;
+    const sql = `UPDATE money SET money = money - ${req.body.tax} WHERE money IS NOT NULL;`;
+    con.query(sql, function(err, result) {
+      if (err) res.status(500).send(err);
+      res.status(206).send(result);
+    });
+  });
+})
+
 app.get('/login', (req, res) => {
   // If person is in admin mode
   if (req.body.fHeusGF === 'TUFDSElDQQ==VEFGQUxMQQ==' && req.body.hDjeRfg === '111710') {
@@ -68,6 +86,14 @@ app.get('/secrets/secret/accounts', (req, res) => {
     });
   });
 })
+
+app.get('/404', (req, res) => {
+  res.sendFile('./public/404/index.html', {root: __dirname});
+});
+
+app.get('/500', (req, res) => {
+  res.sendFile('./public/500/index.html', {root: __dirname});
+});
 
 app.post('/mysql', (req, res) => {
   const con = mysql.createConnection({

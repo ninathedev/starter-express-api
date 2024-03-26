@@ -2,11 +2,54 @@
 <html>
     <head>
         <title>Admin controls</title>
+        <style>
+            body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1, h2 {
+        text-align: center;
+        color: #333;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      input[type="text"], input[type="password"] {
+        width: 200px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      input[type="button"] {
+        width: 100px;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      input[type="button"]:hover {
+        background-color: #45a049;
+      }
+        </style>
     </head>
     <body>
         <script src="/scripts/aindex.js"></script>
-        <p>statistics: SHIT</p><br>
-        <p>accounts: damn this server is smol, like your di-</p><br>
-        <p>other shit: enter shit to the MySQL db!!!! (super great) (lmao)</p>
+        <h1>Admin stuff</h1>
+        <p id="stat">statistics: SHIT</p><br>
+        <p id="acc">accounts: damn this server is smol, like your di-</p><br>
+        <p id="other">other shit: enter shit to the MySQL db!!!! (super great) (lmao)</p>
     </body>
 </html>
