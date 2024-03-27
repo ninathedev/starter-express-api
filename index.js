@@ -98,12 +98,14 @@ app.put('/tax', (req, res) => {
 	});
 });
 
+
+
 app.post('/login', (req, res) => {
 	if (!req.body.fHeusGF && !req.body.hDjeRfg) res.status(404).send('No credientials provided');
 
 	// If person is in admin mode
 	if (req.body.fHeusGF === 'TUFDSElDQQ==VEFGQUxMQQ==' && req.body.hDjeRfg === '111710') {
-		res.sendFile('./public/admin/index.html', {root: __dirname});
+		res.status(301);
 	} else {
 		const con = mysql.createConnection({
 			host: process.env.MYSQLIP,
