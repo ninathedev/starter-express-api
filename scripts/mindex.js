@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 async function loginRequest() {
 	const jKlaSfW = Math.floor(Math.random() * 9000) + 1000;
-	const fHeusGF = parseInt(document.getElementsByName('fHeusGF')[0].value);
-	const hDjeRfg = parseInt(document.getElementsByName('hDjeRfg')[0].value);
+	const fHeusGF = document.getElementsByName('fHeusGF')[0].value;
+	const hDjeRfg = document.getElementsByName('hDjeRfg')[0].value;
 	const body = JSON.stringify({
 		fHeusGF: fHeusGF,
 		hDjeRfg: hDjeRfg
