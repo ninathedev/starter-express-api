@@ -16,6 +16,10 @@ async function getMysql(url = '', data = {}) {
 	return response.json(); // Parses JSON response into native JavaScript objects
 }
 
+function how2() {
+	document.write('NOTE: pls reload page to get back to admin controls.<br><br>Admin controls show all accounts and money in the bank.<br>To give salary, under the statistics tab, type the salary per account and click on the "Give salary" button.<br>(Pro tip: If you want taxes, just type in a NEGATIVE amount of money. It\'ll deduct that amount from the bank.)<br><br>Under the MySQL tab, you can execute MySQL commands. Be careful with this, as it can be dangerous.<br>For more information on MySQL, click <a href="https://www.w3schools.com/mysql/mysql_sql.asp">here</a>.<br><br>The total amount of money and the average amount of money can be seen in the statistics tab.<br><br>To give salary to a specific person or only to a selected amount of people, i am lazy so just learn MySQL pls? ');
+}
+
 function how() {
 	window.location.href = 'https://www.w3schools.com/mysql/mysql_sql.asp';
 }
@@ -60,6 +64,33 @@ async function getMoney() {
 	return response.json();
 }
 
+function sendSalary() {
+	document.getElementById('resultf').innerHTML = 'Sending money...';
+	const tax = Number(document.getElementsByName('sal')[0].value) - (Number(document.getElementsByName('sal')[0].value)+Number(document.getElementsByName('sal')[0].value));
+	const taxData = { tax: tax };
+	fetch('/tax', {
+		method: 'PUT',
+		mode: 'cors',
+		cache: 'no-cache',
+		credentials: 'same-origin',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		redirect: 'follow',
+		referrerPolicy: 'no-referrer',
+		body: JSON.stringify(taxData),
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			console.log(data);
+			document.getElementById('resultf').innerHTML = 'Money sent! (Reload page to see changes)';
+			location.reload;
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 	const accElement = document.getElementById('acc');
 	const statElement = document.getElementById('stat');
@@ -73,6 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		getMoney().then((money) => {
 			const statTable = createTable(money);
 			statElement.appendChild(statTable);
+			const totalAmount = money.reduce((sum, account) => sum + account.money, 0);
+			document.getElementById('total').innerHTML = `Total amount of money in bank: ${totalAmount}`;
+			const averageAmount = totalAmount / money.length;
+			document.getElementById('avg').innerHTML = `Average amount of money in bank: ${averageAmount}`;
 		});
 	}
 

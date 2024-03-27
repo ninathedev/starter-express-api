@@ -71,6 +71,15 @@
       #how:hover {
         background-color: #398EDA;
       }
+
+      #how2 {
+        width: 185px;
+        background-color: #3FA5FF;
+      }
+
+      #how2:hover {
+        background-color: #398EDA;
+      }
     </style>
   </head>
   <body>
@@ -79,20 +88,27 @@
     <hr> <!-- Add a horizontal line here -->
     <div id="firstDiv">
       <div>
-      <h2>Statistics (Money!)</h2>
-      <p id="stat"></p>
+        <h2>Statistics (Money!)</h2>
+        <p id="stat"></p><br>
+        <p id="total"></p>
+        <p id="avg"></p>
+        <input type="text" name="sal" placeholder="Salary of everyone">
+        <input type="button" id="enter" value="Give salary" onclick="sendSalary();return false">
+        <p id="resultf"></p>
       </div>
       <div id="borderMiddle"></div>
       <div>
-      <h2>Accounts</h2>
-      <p id="acc"></p>
+        <h2>Accounts</h2>
+        <p id="acc"></p>
       </div>
       <div id="borderMiddle"></div> <!-- Add a horizontal line here -->
       <div id="o">
-      <input type="text" name="cmd" placeholder="Command to MySQL"><br>
-      <input type="button" id="enter" value="Enter" onclick="sendMySQL();return false">
-      <input type="button" id="how" value="How to use cmd?" onclick="how();return false">
-      <p id="mysqlResponse"></p>
+        <h2>Other stuff</h2>
+        <input type="text" name="cmd" placeholder="Command to MySQL"><br>
+        <input type="button" id="enter" value="Enter" onclick="sendMySQL();return false">
+        <input type="button" id="how" value="How to use cmd?" onclick="how();return false">
+        <input type="button" id="how2" value="How to use admin controls?" onclick="how2();return false">
+        <p id="mysqlResponse"></p>
       </div>
     </div>
     <hr> <!-- Add a horizontal line here -->
