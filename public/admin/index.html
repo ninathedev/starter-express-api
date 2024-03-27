@@ -1,85 +1,100 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Admin controls</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-          }
+  <head>
+    <title>Admin controls</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
 
-          h1, h2 {
-            text-align: center;
-            color: #333;
-          }
+      h1, h2 {
+        text-align: center;
+        color: #333;
+      }
 
-          form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-          }
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
 
-          input[type="text"], input[type="password"] {
-            width: 200px;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-          }
+      input[type="text"], input[type="password"] {
+        width: 200px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
 
-          input[type="button"] {
-            width: 100px;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-          }
+      input[type="button"] {
+        width: 100px;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
-          input[type="button"]:hover {
-            background-color: #45a049;
-          }
+      input[type="button"]:hover {
+        background-color: #45a049; 
+      }
 
-          #stat, #acc, #o {
-            padding: 10px;
-            margin: 10px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-            margin-right: auto;
-          }
+      #stat, #acc, #o {
+        padding: 10px;
+        margin: 10px;
+        /*text-align: center;*/
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-          #borderMiddle {
-            border-left: 1px solid #ccc;
-            height: 100px;
-          }
+      #borderMiddle {
+        border-left: 1px solid #ccc;
+        height: 75vh;
+      }
 
-          #firstDiv {
-            display: flex;
-            justify-content: space-between;
-          }
-        </style>
-    </head>
-    <body>
-        <script src="/scripts/aindex.js"></script>
-        <h1>Admin stuff</h1>
-        <hr> <!-- Add a horizontal line here -->
-        <div id="firstDiv">
-            <p id="stat">stat</p>
-            <div id="borderMiddle"></div>
-            <p id="acc">acc</p>
-            <div id="borderMiddle"></div> <!-- Add a horizontal line here -->
-            <div id="o">
-              <input type="text" name="cmd" placeholder="Command to MySQL"><br>
-              <input type="button" value="Enter" onclick="sendMysql();return false">
-              <p id="mysqlResponse"></p>
-            </div>
-        </div>
-        <hr> <!-- Add a horizontal line here -->
-    </body>
+      #firstDiv {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      #how {
+        width: 150px;
+        background-color: #3FA5FF;
+      }
+
+      #how:hover {
+        background-color: #398EDA;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="/scripts/aindex.js"></script>
+    <h1>Admin stuff</h1>
+    <hr> <!-- Add a horizontal line here -->
+    <div id="firstDiv">
+      <div>
+      <h2>Statistics (Money!)</h2>
+      <p id="stat"></p>
+      </div>
+      <div id="borderMiddle"></div>
+      <div>
+      <h2>Accounts</h2>
+      <p id="acc"></p>
+      </div>
+      <div id="borderMiddle"></div> <!-- Add a horizontal line here -->
+      <div id="o">
+      <input type="text" name="cmd" placeholder="Command to MySQL"><br>
+      <input type="button" id="enter" value="Enter" onclick="sendMySQL();return false">
+      <input type="button" id="how" value="How to use cmd?" onclick="how();return false">
+      <p id="mysqlResponse"></p>
+      </div>
+    </div>
+    <hr> <!-- Add a horizontal line here -->
+  </body>
 </html>

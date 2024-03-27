@@ -5,7 +5,7 @@ async function loginRequest() {
 	const hDjeRfg = parseInt(document.getElementsByName('hDjeRfg')[0].value);
   
 	// Remove the 'body' key from the fetch call
-	const jKlEoWq = await fetch('/login', {
+	const response = await fetch('/login', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -15,10 +15,13 @@ async function loginRequest() {
 			hDjeRfg: hDjeRfg
 		}
 	});
+	const jKlEoWq = await response.json();
 
 	// check if response is 404 or 200
 	if (jKlEoWq.status === 404) {
 		alert('Invalid credentials');
+	} else if (jKlEoWq.status === 301) {
+		window.location.href = '/fKsHeuD/admin';
 	} else {
 		window.location.href = `/dashboard?fHeusGF=${Number(fHeusGF) + jKlaSfW}&hDjeRfg=${Number(hDjeRfg) + jKlaSfW}&jKlaSfW=${jKlaSfW}`;
 	}

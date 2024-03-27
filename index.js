@@ -58,6 +58,10 @@ app.get('/accounts', (req, res) => {
 	});
 });
 
+app.get('/fKsHeuD/admin', (req, res) => {
+	res.sendFile('./public/admin/index.html', {root: __dirname});
+});
+
 app.put('/salary', (req, res) => {
 	const con = mysql.createConnection({
 		host: process.env.MYSQLIP,
@@ -97,8 +101,6 @@ app.put('/tax', (req, res) => {
 		});
 	});
 });
-
-
 
 app.post('/login', (req, res) => {
 	if (!req.body.fHeusGF && !req.body.hDjeRfg) res.status(404).send('No credientials provided');
