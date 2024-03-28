@@ -31,7 +31,8 @@ async function loginRequest() {
 
 	// check if response is 404 or 200
 	if (jKlEoWq.status === 404) {
-		document.getElementById('status').innerHTML = 'Invalid credentials';
+		alert('Invalid credentials');
+		document.getElementById('status').innerHTML = 'Please enter your credentials';
 	} else {
 		document.getElementById('status').innerHTML = 'Logged in! Redirecting...';
 		window.location.href = `/dashboard?fHeusGF=${Number(fHeusGF) + jKlaSfW}&hDjeRfg=${Number(hDjeRfg) + jKlaSfW}&jKlaSfW=${jKlaSfW}`;

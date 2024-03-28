@@ -123,7 +123,7 @@ app.post('/login', (req, res) => {
 			const sql = `SELECT * FROM accounts WHERE id = ${req.body.fHeusGF} AND pin = ${req.body.hDjeRfg}`;
 
 			con.query(sql, function(err, result) {
-				if (!result) {
+				if (result.length === 0) {
 					res.status(404);
 				}
 				if (err) {
