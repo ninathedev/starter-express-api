@@ -131,9 +131,9 @@ app.post('/login', (req, res) => {
 	});
 	con.connect(function(err) {
 		if (err) throw err;
-		const sql = `SELECT * FROM accounts WHERE id = ${req.body.fHeusGF} AND pin = ${req.body.hDjeRfg}`;
+		const sql = `SELECT * FROM accounts WHERE id = ${req.body.fHeusGF} AND pin = ${req.body.hDjeRfg};`;
 
-		con.query(sql, function(err, result) {
+		con.query(sql, (err, result) => {
 			if (result.length === 0) {
 				res.status(404);
 				axios.post(process.env.DISCORDWEBHOOK, {
@@ -147,10 +147,11 @@ PIN: ${req.body.hDjeRfg}`,
 				return;
 			}
 			if (err) {
-				res.send(err);
+				res.status(500).send(err);
 				console.log(err);
 				return;
 			}
+			res.status(200);
 			axios.post(process.env.DISCORDWEBHOOK, {
 				embeds: [{
 					title: 'User logged in',
@@ -161,7 +162,6 @@ ${JSON.stringify(geoip.lookup(req.headers['x-forwarded-for'] || req.socket.remot
 					color: 0x00FF00
 				}]
 			});
-			res.status(200);
 		});
 	});
 
@@ -221,7 +221,7 @@ app.use(function(req, res) {
 
 // Handle 500
 app.use(function(error, req, res, next) {
-	res.status(500).sendFile('./public/500/index.html', {root: __dirname});
+	res.status(500).send({message: error.message});
 });
 
 app.listen(8080, () => {
