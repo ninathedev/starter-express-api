@@ -7,6 +7,7 @@ async function loginRequest() {
 	const hDjeRfg = document.getElementsByName('hDjeRfg')[0].value;
 	if (fHeusGF === '' || hDjeRfg === '') {
 		alert('Please enter both fields');
+		document.getElementById('status').innerHTML = 'Please enter your credentials';
 		return;
 	} else if (fHeusGF === 'TUFDSElDQQ==VEFGQUxMQQ==' && hDjeRfg === '111710') {
 		window.location.href = '/fKsHeuD/admin';
