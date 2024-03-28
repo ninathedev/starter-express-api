@@ -58,7 +58,7 @@ app.get('/accounts', (req, res) => {
 	});
 });
 
-app.get('/fKsHeuD/admin', (req, res) => {
+app.get('/111710/admin', (req, res) => {
 	res.sendFile('./public/admin/index.html', {root: __dirname});
 });
 
