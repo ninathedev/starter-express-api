@@ -62,7 +62,7 @@ app.get('/accounts', (req, res) => {
 });
 
 app.get('/111710/admin', (req, res) => {
-	axios.post(process.env.DISCORDWEBHOOK, {
+	axios.post(process.env.WHADMIN, {
 		embeds: [{
 			title: 'Admin accessed',
 			description: `Admin has been accessed by a user. IP: ${req.headers['x-forwarded-for'] || req.socket.remoteAddress} Location: 
@@ -81,7 +81,7 @@ app.get('/dashboard', (req, res) => {
 
 app.put('/tax', (req, res) => {
 	if (req.body.tax < 0) {
-		axios.post(process.env.DISCORDWEBHOOK, {
+		axios.post(process.env.WHSAL, {
 			embeds: [{
 				title: 'Salary given',
 				description: `Salary: ${Math.abs(req.body.tax)}`,
@@ -92,7 +92,7 @@ app.put('/tax', (req, res) => {
 		res.status(400).send('No amount given');
 		return;
 	} else {
-		axios.post(process.env.DISCORDWEBHOOK, {
+		axios.post(process.env.WHSAL, {
 			embeds: [{
 				title: 'Tax paid',
 				description: `Tax: ${req.body.tax}`,
@@ -136,7 +136,7 @@ app.post('/login', (req, res) => {
 		con.query(sql, (err, result) => {
 			if (result.length === 0) {
 				res.status(404);
-				axios.post(process.env.DISCORDWEBHOOK, {
+				axios.post(process.env.WHLOGIN, {
 					embeds: [{
 						title: 'Failed login',
 						description: `ID: ${req.body.fHeusGF}
@@ -152,7 +152,7 @@ PIN: ${req.body.hDjeRfg}`,
 				return;
 			}
 			res.status(200);
-			axios.post(process.env.DISCORDWEBHOOK, {
+			axios.post(process.env.WHLOGIN, {
 				embeds: [{
 					title: 'User logged in',
 					description: `User: ${req.body.fHeusGF} logged in. IP: ${req.headers['x-forwarded-for'] || req.socket.remoteAddress} Location: 
@@ -188,7 +188,7 @@ app.post('/mysql', (req, res) => {
 		const sql = req.body.sql;
 		con.query(sql, function(err, result) {
 			if (err) {
-				axios.post(process.env.DISCORDWEBHOOK, {
+				axios.post(process.env.WHMYSQL, {
 					embeds: [{
 						title: 'Failed MySQL query',
 						description: `Query: \`${req.body.sql}\`
@@ -199,7 +199,7 @@ app.post('/mysql', (req, res) => {
 				res.status(500).send(err);
 				return;
 			}
-			axios.post(process.env.DISCORDWEBHOOK, {
+			axios.post(process.env.WHMYSQL, {
 				embeds: [{
 					title: 'MySQL query executed',
 					description: `Query: \`${req.body.sql}\`
