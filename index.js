@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
-
 require('dotenv').config();
+
+const axios = require('axios');
 
 const express = require('express');
 const app = express();
@@ -59,25 +60,14 @@ app.get('/accounts', (req, res) => {
 });
 
 app.get('/111710/admin', (req, res) => {
+	axios.post(process.env.DISCORDWEBHOOK, {
+		embeds: [{
+			title: 'Admin accessed',
+			description: 'Admin has been accessed by a user.',
+			color: 0x00FF00
+		}]
+	});
 	res.sendFile('./public/admin/index.html', {root: __dirname});
-});
-
-app.put('/salary', (req, res) => {
-	const con = mysql.createConnection({
-		host: process.env.MYSQLIP,
-		user: process.env.MYSQLUSER,
-		password: process.env.MYSQLPW,
-		database: process.env.MYSQLDB
-	});
-
-	con.connect(function(err) {
-		if (err) throw err;
-		const sql = `UPDATE money SET money = money + ${req.body.salary} WHERE id=${req.body.id};`;
-		con.query(sql, function(err, result) {
-			if (err) res.status(500).send(err);
-			res.status(206).send(result);
-		});
-	});
 });
 
 app.get('/dashboard', (req, res) => {
@@ -85,6 +75,26 @@ app.get('/dashboard', (req, res) => {
 });
 
 app.put('/tax', (req, res) => {
+	if (req.body.tax < 0) {
+		axios.post(process.env.DISCORDWEBHOOK, {
+			embeds: [{
+				title: 'Salary given',
+				description: `Salary: ${Math.abs(req.body.tax)}`,
+				color: 0x00FF00
+			}]
+		});
+	} else if (req.body.tax === 0 || !req.body.tax) {
+		res.status(400).send('No amount given');
+		return;
+	} else {
+		axios.post(process.env.DISCORDWEBHOOK, {
+			embeds: [{
+				title: 'Tax paid',
+				description: `Tax: ${req.body.tax}`,
+				color: 0xFF0000
+			}]
+		});
+	}
 	const con = mysql.createConnection({
 		host: process.env.MYSQLIP,
 		user: process.env.MYSQLUSER,
@@ -94,7 +104,7 @@ app.put('/tax', (req, res) => {
 
 	con.connect(function(err) {
 		if (err) throw err;
-		const sql = `UPDATE money SET money = money - ${req.body.tax} WHERE money IS NOT NULL;`;
+		const sql = `UPDATE money SET money = money - ${req.body.tax}`;
 		con.query(sql, function(err, result) {
 			if (err) res.status(500).send(err);
 			res.status(206).send(result);
@@ -104,37 +114,50 @@ app.put('/tax', (req, res) => {
 
 app.post('/login', (req, res) => {
 	if (!req.body.fHeusGF && !req.body.hDjeRfg) res.status(404).send('No credientials provided');
-
-	// If person is in admin mode
 	if (req.body.fHeusGF === 'TUFDSElDQQ==VEFGQUxMQQ==' && req.body.hDjeRfg === '111710') {
 		res.status(301);
-	} else {
-		const con = mysql.createConnection({
-			host: process.env.MYSQLIP,
-			user: process.env.MYSQLUSER,
-			password: process.env.MYSQLPW,
-			database: process.env.MYSQLDB
-		});
-		con.connect(function(err) {
-			if (err) throw err;
-			// For secrurity purposes, we use randomized variable names.
-			// id = ${fHeusGF}
-			// pin = ${hDjeRfg}
-			const sql = `SELECT * FROM accounts WHERE id = ${req.body.fHeusGF} AND pin = ${req.body.hDjeRfg}`;
-
-			con.query(sql, function(err, result) {
-				if (result.length === 0) {
-					res.status(404);
-				}
-				if (err) {
-					res.send(err);
-					console.log(err);
-				}
-
-				res.status(200); // We do not want to redirect because the client will do that.
-			});
-		});
+		return;
 	}
+	const con = mysql.createConnection({
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
+	});
+	con.connect(function(err) {
+		if (err) throw err;
+		const sql = `SELECT * FROM accounts WHERE id = ${req.body.fHeusGF} AND pin = ${req.body.hDjeRfg}`;
+
+		con.query(sql, function(err, result) {
+			if (result.length === 0) {
+				res.status(404);
+				axios.post(process.env.DISCORDWEBHOOK, {
+					embeds: [{
+						title: 'Failed login',
+						description: `ID: ${req.body.fHeusGF}
+PIN: ${req.body.hDjeRfg}`,
+						color: 0xFF0000
+					}]
+				});
+				return;
+			}
+			if (err) {
+				res.send(err);
+				console.log(err);
+				return;
+			}
+			axios.post(process.env.DISCORDWEBHOOK, {
+				embeds: [{
+					title: 'User logged in',
+					description: `User: ${req.body.fHeusGF} logged in.`,
+					color: 0x00FF00
+				}]
+			});
+			res.status(200);
+		});
+	});
+
+	
 });
 
 app.get('/404', (req, res) => {
@@ -156,7 +179,26 @@ app.post('/mysql', (req, res) => {
 		if (err) console.log(err);
 		const sql = req.body.sql;
 		con.query(sql, function(err, result) {
-			if (err) res.status(500).send(err);
+			if (err) {
+				axios.post(process.env.DISCORDWEBHOOK, {
+					embeds: [{
+						title: 'Failed MySQL query',
+						description: `Query: \`${req.body.sql}\`
+	Result: \`${JSON.stringify(result)}\``,
+						color: 0xFFFF00
+					}]
+				});
+				res.status(500).send(err);
+				return;
+			}
+			axios.post(process.env.DISCORDWEBHOOK, {
+				embeds: [{
+					title: 'MySQL query executed',
+					description: `Query: \`${req.body.sql}\`
+Result: \`${JSON.stringify(result)}\``,
+					color: 0x0000FF
+				}]
+			});
 			res.send(result);
 		});
 	});

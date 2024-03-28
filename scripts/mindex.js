@@ -33,8 +33,14 @@ async function loginRequest() {
 	if (jKlEoWq.status === 404) {
 		alert('Invalid credentials');
 		document.getElementById('status').innerHTML = 'Please enter your credentials';
+		return;
+	} else if (jKlEoWq.status === 301) {
+		document.getElementById('status').innerHTML = 'Logged in! Redirecting...';
+		window.location.href = '/111710/admin';
+		return;
 	} else {
 		document.getElementById('status').innerHTML = 'Logged in! Redirecting...';
 		window.location.href = `/dashboard?fHeusGF=${Number(fHeusGF) + jKlaSfW}&hDjeRfg=${Number(hDjeRfg) + jKlaSfW}&jKlaSfW=${jKlaSfW}`;
+		return;
 	}
 }

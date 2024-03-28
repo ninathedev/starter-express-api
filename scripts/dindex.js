@@ -29,7 +29,7 @@ async function getMysql(url = '', data = {}) {
 
 getMysql('/mysql',{sql:`SELECT * FROM accounts WHERE id = ${fHeusGF} AND pin = ${hDjeRfg}`}).then((data) => {
 	if (data[0] === undefined) {
-		console.log(data);
+		window.location.href = '/404';
 	} else {
 		getMysql('/mysql', {sql: `SELECT * FROM money WHERE id = ${fHeusGF}`}).then((data) => {
 			if (data[0] === undefined) {
