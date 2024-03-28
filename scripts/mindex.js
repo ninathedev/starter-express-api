@@ -10,14 +10,11 @@ async function loginRequest() {
 		document.getElementById('status').innerHTML = 'Please enter your credentials';
 		return;
 	} else if (fHeusGF === 'TUFDSElDQQ==VEFGQUxMQQ==' && hDjeRfg === '111710') {
-		window.location.href = '/fKsHeuD/admin';
+		document.getElementById('status').innerHTML = 'Logged in! Redirecting...';
+		window.location.href = '/111710/admin';
 		return;
 	}
 
-	const body = JSON.stringify({
-		fHeusGF: fHeusGF,
-		hDjeRfg: hDjeRfg
-	});
 	document.getElementById('status').innerHTML = 'Requesting login... (this may take a while)';
 	// Remove the 'body' key from the fetch call
 	const response = await fetch('/login', {
@@ -25,7 +22,10 @@ async function loginRequest() {
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		body: body
+		body: {
+			fHeusGF: fHeusGF,
+			hDjeRfg: hDjeRfg
+		}
 	});
 	const jKlEoWq = await response.json();
 
