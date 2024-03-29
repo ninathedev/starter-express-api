@@ -43,6 +43,51 @@ app.get('/money', (req, res) => {
 	});
 });
 
+app.put('/indsal', (req, res) => {
+	if (!req.body.id || !req.body.salary) {
+		res.status(400).send('No ID provided');
+		return;
+	}
+	if (req.body.salary === 0 || !req.body.salary) {
+		res.status(400).send('No amount given');
+		return;
+	}
+	const con = mysql.createConnection({
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
+	});
+	con.connect(function(err) {
+		if (err) throw err;
+		const sql = `UPDATE money SET money = money + ${req.body.salary} WHERE id = ${req.body.id}`;
+		con.query(sql, function(err, result) {
+			if (err) {
+				res.status(500).send(err);
+				return;
+			}
+			res.status(206).send(result);
+			if (req.body.salary < 0) {
+				axios.post(process.env.WHSAL, {
+					embeds: [{
+						title: `Salary given to ${req.body.id}`,
+						description: `Salary: ${Math.abs(req.body.salary)}`,
+						color: 0x00FF00
+					}]
+				});
+			} else {
+				axios.post(process.env.WHSAL, {
+					embeds: [{
+						title: `Tax paid by ${req.body.id}`,
+						description: `Tax: ${req.body.salary*-1}`,
+						color: 0xFF0000
+					}]
+				});
+			}
+		});
+	});
+});
+
 app.get('/accounts', (req, res) => {
 	const con = mysql.createConnection({
 		host: process.env.MYSQLIP,

@@ -17,7 +17,7 @@ async function getMysql(url = '', data = {}) {
 }
 
 function how2() {
-	document.write('NOTE: pls reload page to get back to admin controls.<br><br>Admin controls show all accounts and money in the bank.<br>To give salary, under the statistics tab, type the salary per account and click on the "Give salary" button.<br>(Pro tip: If you want taxes, just type in a NEGATIVE amount of money. It\'ll deduct that amount from the bank.)<br><br>Under the MySQL tab, you can execute MySQL commands. Be careful with this, as it can be dangerous.<br>For more information on MySQL, click <a href="https://www.w3schools.com/mysql/mysql_sql.asp">here</a>.<br><br>The total amount of money and the average amount of money can be seen in the statistics tab.<br><br>To give salary to a specific person or only to a selected amount of people, i am lazy so just learn MySQL pls? ');
+	document.write('NOTE: pls reload page to get back to admin controls.<br><br>Admin controls show all accounts and money in the bank.<br>To give salary, under the statistics tab, type the salary per account and click on the "Give salary" button.<br>(Pro tip: If you want taxes, just type in a NEGATIVE amount of money. It\'ll deduct that amount from the bank.)<br><br>Under the MySQL tab, you can execute MySQL commands. Be careful with this, as it can be dangerous.<br>For more information on MySQL, click <a href="https://www.w3schools.com/mysql/mysql_sql.asp">here</a>.<br><br>The total amount of money and the average amount of money can be seen in the statistics tab.<br><br>To give salary to a specific person or only to a selected amount of people, use the "Give salary to specific person" button.<br>Enter the ID of the person and the amount of money you want to give to them.<br>(Pro tip: If you want to take money from them, just type in a negative amount of money.)');
 }
 
 function how() {
@@ -88,6 +88,35 @@ function sendSalary() {
 		})
 		.catch((error) => {
 			console.error('Error:', error);
+		});
+}
+
+function sendInSalary() {
+	document.getElementById('resultg').innerHTML = 'Sending money...';
+	const insal = Number(document.getElementsByName('sala')[0].value)*-1;
+	const id = Number(document.getElementsByName('salid')[0].value);
+	const insalData = { salary: insal, id: id};
+	fetch('/insal', {
+		method: 'PUT',
+		mode: 'cors',
+		cache: 'no-cache',
+		credentials: 'same-origin',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		redirect: 'follow',
+		referrerPolicy: 'no-referrer',
+		body: JSON.stringify(insalData),
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			console.log(data);
+			document.getElementById('resultg').innerHTML = 'Money sent! (Reload page to see changes)';
+			location.reload;
+		})
+		.catch((error) => {
+			console.error(`Error: ${error}`);
+			document.getElementById('resultg').innerHTML = `Error: ${error}`;
 		});
 }
 
