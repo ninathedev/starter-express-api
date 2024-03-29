@@ -93,7 +93,7 @@ function sendSalary() {
 
 function sendInSalary() {
 	document.getElementById('resultg').innerHTML = 'Sending money...';
-	const insal = Number(document.getElementsByName('sala')[0].value)*-1;
+	const insal = Number(document.getElementsByName('sala')[0].value);
 	const id = Number(document.getElementsByName('salid')[0].value);
 	const insalData = { salary: insal, id: id};
 	fetch('/insal', {
