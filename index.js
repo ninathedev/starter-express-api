@@ -117,25 +117,6 @@ app.put('/tax', (req, res) => {
 	});
 });
 
-app.get('/getMoney', (req, res) => {
-	if (!req.body.fHeusGF) res.status(404).send('No ID provided');
-	const con = mysql.createConnection({
-		host: process.env.MYSQLIP,
-		user: process.env.MYSQLUSER,
-		password: process.env.MYSQLPW,
-		database: process.env.MYSQLDB
-	});
-	con.connect(function(err) {
-		if (err) throw err;
-		const sql = `SELECT * FROM money WHERE id = ${req.body.fHeusGF};`;
-		con.query(sql, function(err, result) {
-			if (err) res.status(500);
-			if (result.length === 0) res.status(404).send('No user found');
-			res.status(200).send(result);
-		});
-	});
-});
-
 app.post('/login', (req, res) => {
 	if (!req.body.fHeusGF && !req.body.hDjeRfg) res.status(404).send('No credientials provided');
 	if (req.body.fHeusGF === 'TUFDSElDQQ==VEFGQUxMQQ==' && req.body.hDjeRfg === '111710') {
@@ -183,6 +164,8 @@ ${JSON.stringify(geoip.lookup(req.headers['x-forwarded-for'] || req.socket.remot
 			});
 		});
 	});
+
+	
 });
 
 app.get('/404', (req, res) => {
