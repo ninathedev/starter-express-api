@@ -106,7 +106,7 @@ app.get('/accounts', (req, res) => {
 	});
 });
 
-app.get('/111710/admin', (req, res) => {
+app.get(`/${process.env.ADMIN_PIN}/admin`, (req, res) => {
 	axios.post(process.env.WHADMIN, {
 		embeds: [{
 			title: 'Admin accessed',
@@ -165,7 +165,7 @@ app.put('/tax', (req, res) => {
 
 app.post('/login', (req, res) => {
 	if (!req.body.fHeusGF && !req.body.hDjeRfg) res.status(404).send('No credientials provided');
-	if (req.body.fHeusGF === 'TUFDSElDQQ==VEFGQUxMQQ==' && req.body.hDjeRfg === '111710') {
+	if (req.body.fHeusGF === process.env.ADMIN_ID && req.body.hDjeRfg === process.env.ADMIN_PIN) {
 		res.status(301);
 		return;
 	}
