@@ -230,7 +230,7 @@ app.post('/mysql', (req, res) => {
 					}]
 				});
 			} else {
-				axios.post(process.env.WHMYSQL, {
+				axios.post(process.env.WHLOGIN, {
 					embeds: [{
 						title: 'Login query executed',
 						description: `Query: \`${req.body.sql}\`
