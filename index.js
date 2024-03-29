@@ -43,7 +43,7 @@ app.get('/money', (req, res) => {
 	});
 });
 
-app.put('/indsal', (req, res) => {
+app.put('/insal', (req, res) => {
 	if (!req.body.id || !req.body.salary) {
 		res.status(400).send('No ID provided');
 		return;
