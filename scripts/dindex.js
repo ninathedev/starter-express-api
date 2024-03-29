@@ -24,19 +24,30 @@ async function getMysql(url = '', data = {}) {
 		referrerPolicy: 'no-referrer',
 		body: JSON.stringify(data),
 	});
-	return response.json(); // Parses JSON response into native JavaScript objects
-}
-
-getMysql('/mysql',{sql:`SELECT * FROM accounts WHERE id = ${fHeusGF} AND pin = ${hDjeRfg}`}).then((data) => {
-	if (data[0] === undefined) {
+	if (response.status === 404) {
 		window.location.href = '/404';
 	} else {
-		getMysql('/mysql', {sql: `SELECT * FROM money WHERE id = ${fHeusGF}`}).then((data) => {
-			if (data[0] === undefined) {
-				window.location.href = '/500';
-			} else {
-				document.getElementById('balanceAmount').innerHTML = `${data[0].money} Terrabucks`;
-			}
+		// another get request to /getMoney
+		const response2 = await fetch('/getMoney', {
+			method: 'GET',
+			mode: 'cors',
+			cache: 'no-cache',
+			credentials: 'same-origin',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			redirect: 'follow',
+			referrerPolicy: 'no-referrer',
+			body: JSON.stringify({fHeusGF:fHeusGF}),
 		});
+
+		if (response2.status === 404) {
+			window.location.href = '/404';
+		} else {
+			const data = await response2.json();
+			document.getElementById('money').innerHTML = `${data[0].money} Terrabucks`;
+		}
 	}
-});
+}
+
+getMysql('/login',{fHeusGF:fHeusGF,hDjeRfg:hDjeRfg});
