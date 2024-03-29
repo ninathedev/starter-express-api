@@ -200,7 +200,7 @@ app.post('/mysql', (req, res) => {
 						embeds: [{
 							title: 'Failed MySQL query',
 							description: `Query: \`${req.body.sql}\`
-		Result: \`${JSON.stringify(result)}\``,
+		Result: \`${err||JSON.stringify(result)}\``,
 							color: 0xFFFF00
 						}]
 					});
@@ -211,7 +211,7 @@ app.post('/mysql', (req, res) => {
 						embeds: [{
 							title: 'Failed login',
 							description: `Query: \`${req.body.sql}\`
-		Result: \`${JSON.stringify(result)}\``,
+		Result: \`${err||JSON.stringify(result)}\``,
 							color: 0xFFFF00
 						}]
 					});
