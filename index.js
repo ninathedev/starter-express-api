@@ -177,6 +177,13 @@ app.get('/500', (req, res) => {
 });
 
 app.post('/mysql', (req, res) => {
+	let loginMode = false;
+	if (!req.body.sql) {
+		res.status(400).send('No SQL query provided');
+		return;
+	} else if (req.body.login) {
+		loginMode = true;
+	}
 	const con = mysql.createConnection({
 		host: process.env.MYSQLIP,
 		user: process.env.MYSQLUSER,
@@ -188,25 +195,50 @@ app.post('/mysql', (req, res) => {
 		const sql = req.body.sql;
 		con.query(sql, function(err, result) {
 			if (err) {
+				if (!loginMode) {
+					axios.post(process.env.WHMYSQL, {
+						embeds: [{
+							title: 'Failed MySQL query',
+							description: `Query: \`${req.body.sql}\`
+		Result: \`${JSON.stringify(result)}\``,
+							color: 0xFFFF00
+						}]
+					});
+					res.status(500).send(err);
+					return;
+				} else {
+					axios.post(process.env.WHLOGIN, {
+						embeds: [{
+							title: 'Failed login',
+							description: `Query: \`${req.body.sql}\`
+		Result: \`${JSON.stringify(result)}\``,
+							color: 0xFFFF00
+						}]
+					});
+					res.status(500).send(err);
+					return;
+				}
+			}
+
+			if (!loginMode) {
 				axios.post(process.env.WHMYSQL, {
 					embeds: [{
-						title: 'Failed MySQL query',
+						title: 'MySQL query executed',
 						description: `Query: \`${req.body.sql}\`
 	Result: \`${JSON.stringify(result)}\``,
-						color: 0xFFFF00
+						color: 0x0000FF
 					}]
 				});
-				res.status(500).send(err);
-				return;
+			} else {
+				axios.post(process.env.WHMYSQL, {
+					embeds: [{
+						title: 'Login query executed',
+						description: `Query: \`${req.body.sql}\`
+	Result: \`${JSON.stringify(result)}\``,
+						color: 0x0000FF
+					}]
+				});
 			}
-			axios.post(process.env.WHMYSQL, {
-				embeds: [{
-					title: 'MySQL query executed',
-					description: `Query: \`${req.body.sql}\`
-Result: \`${JSON.stringify(result)}\``,
-					color: 0x0000FF
-				}]
-			});
 			res.send(result);
 		});
 	});

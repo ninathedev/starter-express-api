@@ -27,11 +27,11 @@ async function getMysql(url = '', data = {}) {
 	return response.json(); // Parses JSON response into native JavaScript objects
 }
 
-getMysql('/mysql',{sql:`SELECT * FROM accounts WHERE id = ${fHeusGF} AND pin = ${hDjeRfg}`}).then((data) => {
+getMysql('/mysql',{sql:`SELECT * FROM accounts WHERE id = ${fHeusGF} AND pin = ${hDjeRfg}`,login:true}).then((data) => {
 	if (data[0] === undefined) {
 		window.location.href = '/404';
 	} else {
-		getMysql('/mysql', {sql: `SELECT * FROM money WHERE id = ${fHeusGF}`}).then((data) => {
+		getMysql('/mysql', {sql: `SELECT * FROM money WHERE id = ${fHeusGF}`,login:true}).then((data) => {
 			if (data[0] === undefined) {
 				window.location.href = '/500';
 			} else {
