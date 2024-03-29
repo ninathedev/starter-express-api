@@ -125,26 +125,10 @@ app.get('/dashboard', (req, res) => {
 });
 
 app.put('/tax', (req, res) => {
-	if (req.body.tax < 0) {
-		axios.post(process.env.WHSAL, {
-			embeds: [{
-				title: 'Salary given',
-				description: `Salary: ${Math.abs(req.body.tax)}`,
-				color: 0x00FF00
-			}]
-		});
-	} else if (req.body.tax === 0 || !req.body.tax) {
+	if (req.body.tax === 0 || !req.body.tax) {
 		res.status(400).send('No amount given');
 		return;
-	} else {
-		axios.post(process.env.WHSAL, {
-			embeds: [{
-				title: 'Tax paid',
-				description: `Tax: ${req.body.tax}`,
-				color: 0xFF0000
-			}]
-		});
-	}
+	} 
 	const con = mysql.createConnection({
 		host: process.env.MYSQLIP,
 		user: process.env.MYSQLUSER,
@@ -158,6 +142,23 @@ app.put('/tax', (req, res) => {
 		con.query(sql, function(err, result) {
 			if (err) res.status(500).send(err);
 			res.status(206).send(result);
+			if (req.body.tax < 0) {
+				axios.post(process.env.WHSAL, {
+					embeds: [{
+						title: 'Salary given',
+						description: `Salary: ${Math.abs(req.body.tax)}`,
+						color: 0x00FF00
+					}]
+				});
+			} else {
+				axios.post(process.env.WHSAL, {
+					embeds: [{
+						title: 'Tax paid',
+						description: `Tax: ${req.body.tax}`,
+						color: 0xFF0000
+					}]
+				});
+			}
 		});
 	});
 });
