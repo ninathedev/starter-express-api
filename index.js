@@ -71,7 +71,7 @@ app.put('/transact', (req, res) => {
 		con.query(`UPDATE money SET money = money - ${req.body.amount} WHERE id = ${req.body.from};`, function(err, result) {
 			if (err) {
 				console.log(err);
-				res.status(500);
+				res.status(500).send(err);
 				return;
 			}
 			res.status(204);

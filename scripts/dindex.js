@@ -62,6 +62,7 @@ async function giveMoney() {
 	if (response.status !== 204) {
 		document.getElementById('statusSend').innerHTML = 'Failed to send money!';
 		console.log(response);
+		console.log(response.json());
 	}
 	if (textSend == fHeusGF) {
 		document.getElementById('statusSend').innerHTML = 'You cannot send money to yourself!';
