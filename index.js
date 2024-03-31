@@ -115,7 +115,7 @@ app.put('/insal', (req, res) => {
 				return;
 			}
 			res.status(206).send(result);
-			if (req.body.salary < 0) {
+			if (req.body.salary > 0) {
 				axios.post(process.env.WHSAL, {
 					embeds: [{
 						title: `Salary given to ${req.body.id}`,
