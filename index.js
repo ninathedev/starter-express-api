@@ -62,6 +62,7 @@ app.put('/transact', (req, res) => {
 		if (err) throw err;
 		con.query(`UPDATE money SET money = money + ${req.body.amount} WHERE id = ${req.body.to};`, function(err, result) {
 			if (err) {
+				console.log(err);
 				res.status(500).send(err);
 				return;
 			}
@@ -69,6 +70,7 @@ app.put('/transact', (req, res) => {
 		});
 		con.query(`UPDATE money SET money = money - ${req.body.amount} WHERE id = ${req.body.from};`, function(err, result) {
 			if (err) {
+				console.log(err);
 				res.status(500);
 				return;
 			}
@@ -104,6 +106,7 @@ app.put('/insal', (req, res) => {
 		const sql = `UPDATE money SET money = money + ${req.body.salary} WHERE id = ${req.body.id}`;
 		con.query(sql, function(err, result) {
 			if (err) {
+				console.log(err);
 				res.status(500).send(err);
 				return;
 			}
