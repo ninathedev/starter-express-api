@@ -1,7 +1,6 @@
 const url = new URL(window.location.href);
 const params = new URLSearchParams(url.search);
 
-
 const jKlaSfW = params.get('jKlaSfW');
 const fHeusGF = params.get('fHeusGF')-jKlaSfW;
 const hDjeRfg = params.get('hDjeRfg')-jKlaSfW;
@@ -11,7 +10,7 @@ if (jKlaSfW === null || fHeusGF === null || hDjeRfg === null) {
 	window.location.href = '/404';
 }
 
-async function getMysql(url = '', data = {}) {
+async function POSTRequest1(url = '', data = {}) {
 	const response = await fetch(url, {
 		method: 'POST',
 		mode: 'cors',
@@ -27,11 +26,11 @@ async function getMysql(url = '', data = {}) {
 	return response.json(); // Parses JSON response into native JavaScript objects
 }
 
-getMysql('/mysql',{sql:`SELECT * FROM accounts WHERE id = ${fHeusGF} AND pin = ${hDjeRfg}`,login:true}).then((data) => {
+POSTRequest1('/mysql',{sql:`SELECT * FROM accounts WHERE id = ${fHeusGF} AND pin = ${hDjeRfg}`,login:true}).then((data) => {
 	if (data[0] === undefined) {
 		window.location.href = '/404';
 	} else {
-		getMysql('/mysql', {sql: `SELECT * FROM money WHERE id = ${fHeusGF}`,login:true}).then((data) => {
+		POSTRequest1('/mysql', {sql: `SELECT * FROM money WHERE id = ${fHeusGF}`,login:true}).then((data) => {
 			if (data[0] === undefined) {
 				window.location.href = '/500';
 			} else {
@@ -40,3 +39,15 @@ getMysql('/mysql',{sql:`SELECT * FROM accounts WHERE id = ${fHeusGF} AND pin = $
 		});
 	}
 });
+
+// eslint-disable-next-line no-unused-vars
+function giveMoney() {
+	const textSend = document.getElementById('textSend').value;
+	POSTRequest1('/transact', { from: fHeusGF, to: textSend }).then((data) => {
+		if (data[0] === undefined) {
+			window.location.href = '/500';
+		} else {
+			document.getElementById('balanceAmount').innerHTML = `${data[0].money} Terrabucks`;
+		}
+	});
+}
