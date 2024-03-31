@@ -39,8 +39,14 @@ POSTRequest1('/mysql',{sql:`SELECT * FROM accounts WHERE id = ${fHeusGF} AND pin
 		});
 	}
 });
-async function PUTRequest1(url = '', data = {}) {
-	const response = await fetch(url, {
+
+// eslint-disable-next-line no-unused-vars
+async function giveMoney() {
+	const amountSend = document.getElementById('amountSend').value;
+	const textSend = document.getElementById('textSend').value;
+	document.getElementById('statusSend').innerHTML = 'Sending...';
+	// eslint-disable-next-line no-unused-vars
+	const response = await fetch('/transact', {
 		method: 'PUT',
 		mode: 'cors',
 		cache: 'no-cache',
@@ -50,26 +56,20 @@ async function PUTRequest1(url = '', data = {}) {
 		},
 		redirect: 'follow',
 		referrerPolicy: 'no-referrer',
-		body: JSON.stringify(data),
+		body: JSON.stringify({amount: amountSend, to: textSend, from: fHeusGF}),
 	});
-	return response.json(); // Parses JSON response into native JavaScript objects
-}
 
-// eslint-disable-next-line no-unused-vars
-function giveMoney() {
-	const amountSend = document.getElementById('amountSend').value;
-	const textSend = document.getElementById('textSend').value;
-	document.getElementById('statusSend').innerHTML = 'Sending...';
-	// eslint-disable-next-line no-unused-vars
-	PUTRequest1('/transact', { from: fHeusGF, to: textSend, amount: amountSend }).then((data) => {
-		if (textSend == fHeusGF) {
-			document.getElementById('statusSend').innerHTML = 'You cannot send money to yourself!';
-			return;
-		}
-		if (amountSend < 1) {
-			document.getElementById('statusSend').innerHTML = 'You cannot send negative/no amount!';
-			return;
-		}
-		document.getElementById('statusSend').innerHTML = 'Successfully sent! Please refresh the page to see the changes.';
-	});
+	if (response.status !== 204) {
+		document.getElementById('statusSend').innerHTML = 'Failed to send money!';
+		console.log(response);
+	}
+	if (textSend == fHeusGF) {
+		document.getElementById('statusSend').innerHTML = 'You cannot send money to yourself!';
+		return;
+	}
+	if (amountSend < 1) {
+		document.getElementById('statusSend').innerHTML = 'You cannot send negative/no amount!';
+		return;
+	}
+	document.getElementById('statusSend').innerHTML = 'Successfully sent! Please refresh the page to see the changes.';
 }
