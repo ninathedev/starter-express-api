@@ -266,10 +266,6 @@ app.get('/404', (req, res) => {
 	res.sendFile('./public/404/index.html', {root: __dirname});
 });
 
-app.get('/500', (req, res) => {
-	res.sendFile('./public/500/index.html', {root: __dirname});
-});
-
 app.post('/mysql', (req, res) => {
 	let loginMode = false;
 	if (!req.body.sql) {
@@ -343,11 +339,6 @@ app.post('/mysql', (req, res) => {
 // Handle 404
 app.use(function(req, res) {
 	res.status(404).sendFile('./public/404/index.html', {root: __dirname});
-});
-
-// Handle 500
-app.use(function(error, req, res, next) {
-	res.status(500).send({message: error.message});
 });
 
 app.listen(8080, () => {

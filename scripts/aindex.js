@@ -68,7 +68,7 @@ function sendSalary() {
 	document.getElementById('resultf').innerHTML = 'Sending money...';
 	const tax = Number(document.getElementsByName('sal')[0].value) - (Number(document.getElementsByName('sal')[0].value)+Number(document.getElementsByName('sal')[0].value));
 	const taxData = { tax: tax };
-	fetch('/tax', {
+	const response = fetch('/tax', {
 		method: 'PUT',
 		mode: 'cors',
 		cache: 'no-cache',
@@ -79,16 +79,12 @@ function sendSalary() {
 		redirect: 'follow',
 		referrerPolicy: 'no-referrer',
 		body: JSON.stringify(taxData),
-	})
-		.then((response) => response.json())
-		.then((data) => {
-			console.log(data);
-			document.getElementById('resultf').innerHTML = 'Money sent! (Reload page to see changes)';
-			location.reload;
-		})
-		.catch((error) => {
-			console.error('Error:', error);
-		});
+	});
+	if (response.status === 400) {
+		document.getElementById('resultf').innerHTML = 'No amount given';
+		return;
+	}
+	document.getElementById('resultf').innerHTML = 'Money sent! (Reload page to see changes)';
 }
 
 function sendInSalary() {
