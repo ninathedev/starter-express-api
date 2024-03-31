@@ -86,6 +86,10 @@ app.put('/transact', (req, res) => {
 	});
 });
 
+app.get('/FAQ', (req, res) => {
+	res.sendFile('./public/FAQ/index.html', {root: __dirname});
+});
+
 app.put('/insal', (req, res) => {
 	if (!req.body.id || !req.body.salary) {
 		res.status(400).send('No ID provided');
