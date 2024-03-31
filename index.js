@@ -127,7 +127,7 @@ app.put('/insal', (req, res) => {
 				axios.post(process.env.WHSAL, {
 					embeds: [{
 						title: `Tax paid by ${req.body.id}`,
-						description: `Tax: ${req.body.salary*-1}`,
+						description: `Tax: ${Math.abs(req.body.salary)}`,
 						color: 0xFF0000
 					}]
 				});
