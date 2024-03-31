@@ -60,21 +60,27 @@ app.put('/transact', (req, res) => {
 	});
 	con.connect(function(err) {
 		if (err) throw err;
-		const sql = `UPDATE money SET money = money + ${req.body.amount} WHERE id = ${req.body.to}; UPDATE money SET money = money - ${req.body.amount} WHERE id = ${req.body.from};`;
-		con.query(sql, function(err, result) {
+		con.query(`UPDATE money SET money = money + ${req.body.amount} WHERE id = ${req.body.to};`, function(err, result) {
 			if (err) {
 				res.status(500).send(err);
 				return;
 			}
-			res.status(206).send(result);
-			axios.post(process.env.WHTRANS, {
-				embeds: [{
-					title: `Transaction from ${req.body.from} to ${req.body.to}`,
-					description: `Amount: ${req.body.amount}`,
-					color: 0x00FF00
-				}]
-			});
+			res.status(204);
 		});
+		con.query(`UPDATE money SET money = money - ${req.body.amount} WHERE id = ${req.body.from};`, function(err, result) {
+			if (err) {
+				res.status(500);
+				return;
+			}
+			res.status(204);
+		});
+	});
+	axios.post(process.env.WHTRANS, {
+		embeds: [{
+			title: `Transaction from ${req.body.from} to ${req.body.to}`,
+			description: `Amount: ${req.body.amount}`,
+			color: 0xFF0000
+		}]
 	});
 });
 
