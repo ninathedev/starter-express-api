@@ -39,12 +39,27 @@ POSTRequest1('/mysql',{sql:`SELECT * FROM accounts WHERE id = ${fHeusGF} AND pin
 		});
 	}
 });
+async function PUTRequest1(url = '', data = {}) {
+	const response = await fetch(url, {
+		method: 'POST',
+		mode: 'cors',
+		cache: 'no-cache',
+		credentials: 'same-origin',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		redirect: 'follow',
+		referrerPolicy: 'no-referrer',
+		body: JSON.stringify(data),
+	});
+	return response.json(); // Parses JSON response into native JavaScript objects
+}
 
 // eslint-disable-next-line no-unused-vars
 function giveMoney() {
 	const amountSend = document.getElementById('amountSend').value;
 	const textSend = document.getElementById('textSend').value;
-	POSTRequest1('/transact', { from: fHeusGF, to: textSend, amount: amountSend }).then((data) => {
+	PUTRequest1('/transact', { from: fHeusGF, to: textSend, amount: amountSend }).then((data) => {
 		if (textSend == fHeusGF) {
 			document.getElementById('statusSend').innerHTML = 'You cannot send money to yourself!';
 			return;
