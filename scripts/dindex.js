@@ -41,7 +41,7 @@ POSTRequest1('/mysql',{sql:`SELECT * FROM accounts WHERE id = ${fHeusGF} AND pin
 });
 async function PUTRequest1(url = '', data = {}) {
 	const response = await fetch(url, {
-		method: 'POST',
+		method: 'PUT',
 		mode: 'cors',
 		cache: 'no-cache',
 		credentials: 'same-origin',
