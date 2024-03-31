@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
-const axios = require('axios');
-
-const express = require('express');
+import axios from 'axios';
+import express from 'express';
 const app = express();
-const mysql = require('mysql');
+import mysql from 'mysql';
+import geoip from 'geoip-lite';
+import path from 'path';
 
-const geoip = require('geoip-lite');
-
+const __dirname = path.resolve();
 app.use(express.json());
 
 app.get('/', (req, res) => {
