@@ -42,12 +42,18 @@ POSTRequest1('/mysql',{sql:`SELECT * FROM accounts WHERE id = ${fHeusGF} AND pin
 
 // eslint-disable-next-line no-unused-vars
 function giveMoney() {
+	const amountSend = document.getElementById('amountSend').value;
 	const textSend = document.getElementById('textSend').value;
-	POSTRequest1('/transact', { from: fHeusGF, to: textSend }).then((data) => {
+	POSTRequest1('/transact', { from: fHeusGF, to: textSend, amount: amountSend }).then((data) => {
+		if (textSend == fHeusGF) {
+			document.getElementById('statusSend').innerHTML = 'You cannot send money to yourself!';
+			return;
+		}
+		document.getElementById('statusSend').innerHTML = 'Sending...';
 		if (data[0] === undefined) {
 			window.location.href = '/500';
 		} else {
-			document.getElementById('balanceAmount').innerHTML = `${data[0].money} Terrabucks`;
+			document.getElementById('statusSend').innerHTML = 'Successfully sent! Please refresh the page to see the changes.';
 		}
 	});
 }
