@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "outDir": "./built",
-    "allowJs": true,
-    "target": "es2022",
-    "allowSyntheticDefaultImports": true
-  },
-  "include": ["./src/**/*", "index.ts"]
-}
