@@ -4,12 +4,12 @@ dotenv.config();
 
 import axios from 'axios';
 import express from 'express';
-const app = express();
 import mysql from 'mysql';
 import geoip from 'geoip-lite';
 import path from 'path';
-
 const __dirname = path.resolve();
+
+const app = express();
 app.use(express.json());
 
 app.get('/', (req, res) => {
