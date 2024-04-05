@@ -25,6 +25,9 @@ app.get('/scripts/aindex.js', (req, res) => {
 app.get('/scripts/dindex.js', (req, res) => {
 	res.sendFile('./scripts/dindex.js', {root: __dirname});
 });
+app.get('/scripts/pindex.js', (req, res) => {
+	res.sendFile('./scripts/pindex.js', {root: __dirname});
+});
 
 app.get('/money', (req, res) => {
 	const con = mysql.createConnection({
@@ -40,6 +43,7 @@ app.get('/money', (req, res) => {
 		con.query(sql, function(err, result) {
 			if (err) res.status(500).send(err);
 			res.status(200).send(result);
+			con.end();
 		});
 	});
 });
@@ -76,6 +80,7 @@ app.put('/transact', (req, res) => {
 				return;
 			}
 			res.status(204);
+			con.end();
 		});
 	});
 	axios.post(process.env.WHTRANS, {
@@ -116,6 +121,7 @@ app.put('/insal', (req, res) => {
 				return;
 			}
 			res.status(206).send(result);
+			con.end();
 			if (req.body.salary > 0) {
 				axios.post(process.env.WHSAL, {
 					embeds: [{
@@ -151,6 +157,7 @@ app.get('/accounts', (req, res) => {
 		con.query(sql, function(err, result) {
 			if (err) res.status(500).send(err);
 			res.status(200).send(result);
+			con.end();
 		});
 	});
 });
@@ -191,6 +198,7 @@ app.put('/tax', (req, res) => {
 		con.query(sql, function(err, result) {
 			if (err) res.status(500).send(err);
 			res.status(206).send(result);
+			con.end();
 			if (req.body.tax < 0) {
 				axios.post(process.env.WHSAL, {
 					embeds: [{
@@ -257,6 +265,7 @@ ${JSON.stringify(geoip.lookup(req.headers['x-forwarded-for'] || req.socket.remot
 					color: 0x00FF00
 				}]
 			});
+			con.end();
 		});
 	});
 
@@ -331,11 +340,36 @@ app.post('/mysql', (req, res) => {
 				});
 			}
 			res.send(result);
+			con.end();
 		});
 	});
 });
 
+app.get('/place', (req, res) => {
+	res.sendFile('./public/place/index.html', {root: __dirname});
+});
 
+app.get('/placeData', (req, res) => {
+	const con = mysql.createConnection({
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
+	});
+
+	const sql = 'SELECT * FROM place;';
+
+	con.query(sql, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(404).send(err);
+			return;
+		}
+
+		res.status(200).send(result);
+		con.end();
+	});
+});
 
 // Handle 404
 app.use(function(req, res) {
