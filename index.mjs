@@ -349,6 +349,26 @@ app.get('/place', (req, res) => {
 	res.sendFile('./public/place/index.html', {root: __dirname});
 });
 
+app.get('/place/palette', (req, res) => {
+	const list = [{
+		name: '2017/2022 initial',
+		colors: ['#FFFFFF', '#E4E4E4', '#888888', '#222222', '#FFA7D1', '#E50000', '#E59500', '#A06A42', '#E5D900', '#94E044', '#02BE01', '#00D3DD', '#0083C7', '#0000EA', '#CF6EE4', '#820080']
+	}, {
+		name: '2022 day 2',
+		colors: ['#BE0039', '#FF4500', '#FFA800', '#FFD635', '#00A368', '#00CC78', '#7EED56', '#00756F', '#009EAA', '#2450A4', '#3690EA', '#51E9F4', '#493AC1', '#6A5CFF', '#811E9F', '#B44AC0', '#FF3881', '#FF99AA', '#6D482F', '#9C6926', '#000000', '#898D90', '#D4D7D9', '#FFFFFF']
+	}, {
+		name: '2022 day 3',
+		colors: ['#6D001A', '#BE0039', '#FF4500', '#FFA800', '#FFD635', '#FFF8B8', '#00A368', '#00CC78', '#7EED56', '#00756F', '#009EAA', '#00CCC0', '#2450A4', '#3690EA', '#51E9F4', '#493AC1', '#6A5CFF', '#94B3FF', '#811E9F', '#B44AC0', '#E4ABFF', '#DE107F', '#FF3881', '#FF99AA', '#6D482F', '#9C6926', '#FFB470', '#000000', '#515252', '#898D90', '#D4D7D9', '#FFFFFF']
+	}, {
+		name: '2023 Greyout',
+		colors: ['#000000', '#000000', '#000000', '#000000', '#515252', '#515252', '#515252', '#515252', '#898D90', '#898D90', '#898D90', '#898D90', '#D4D7D9', '#D4D7D9', '#D4D7D9', '#D4D7D9', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF']
+	}, {
+		name: '2022/2023 Whiteout',
+		colors: ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF']
+	}];
+	res.send(list[0]);
+});
+
 app.patch('/place/draw', (req, res) => {
 	// if (req.body.x || req.body.y || req.body.r || req.body.g || req.body.b) {
 	// 	res.status(400).send('No data provided');
