@@ -370,10 +370,6 @@ app.get('/place/palette', (req, res) => {
 });
 
 app.patch('/place/draw', (req, res) => {
-	// if (req.body.x || req.body.y || req.body.r || req.body.g || req.body.b) {
-	// 	res.status(400).send('No data provided');
-	// 	return;
-	// }
 	const con = mysql.createConnection({
 		host: process.env.MYSQLIP,
 		user: process.env.MYSQLUSER,
