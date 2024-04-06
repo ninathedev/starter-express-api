@@ -85,6 +85,7 @@ function sendSalary() {
 		return;
 	}
 	document.getElementById('resultf').innerHTML = 'Money sent! (Reload page to see changes)';
+	location.reload();
 }
 
 function sendInSalary() {
@@ -108,7 +109,7 @@ function sendInSalary() {
 		.then((data) => {
 			console.log(data);
 			document.getElementById('resultg').innerHTML = 'Money sent! (Reload page to see changes)';
-			location.reload;
+			location.reload();
 		})
 		.catch((error) => {
 			console.error(`Error: ${error}`);
