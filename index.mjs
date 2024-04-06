@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import dotenv from 'dotenv';
 dotenv.config();
-
 import axios from 'axios';
 import express from 'express';
 import mysql from 'mysql';
