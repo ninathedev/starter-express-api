@@ -22,10 +22,10 @@ async function loginRequest() {
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		body: {
+		body: JSON.stringify({
 			fHeusGF: fHeusGF,
 			hDjeRfg: hDjeRfg
-		}
+		})
 	});
 	const jKlEoWq = await response.json();
 

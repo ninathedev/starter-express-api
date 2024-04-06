@@ -349,7 +349,31 @@ app.get('/place', (req, res) => {
 	res.sendFile('./public/place/index.html', {root: __dirname});
 });
 
-app.get('/placeData', (req, res) => {
+app.patch('/place/draw', (req, res) => {
+	if (!req.body.x || !req.body.y || !req.body.r || !req.body.g || !req.body.b) {
+		res.status(400).send('No data provided');
+		return;
+	}
+	const con = mysql.createConnection({
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
+	});
+
+	const sql = `UPDATE place SET r = ${req.body.r}, g = ${req.body.g}, b = ${req.body.b} WHERE x = ${req.body.x} AND y = ${req.body.y};`;
+
+	con.query(sql, (err, result) => {
+		if (err) {
+			res.status(500).send(err);
+			return;
+		}
+		res.status(204).send(result);
+		con.end();
+	});
+});
+
+app.get('/place/data', (req, res) => {
 	const con = mysql.createConnection({
 		host: process.env.MYSQLIP,
 		user: process.env.MYSQLUSER,
@@ -360,13 +384,7 @@ app.get('/placeData', (req, res) => {
 	const sql = 'SELECT * FROM place;';
 
 	con.query(sql, (err, result) => {
-		if (err) {
-			console.log(err);
-			res.status(404).send(err);
-			return;
-		}
-
-		res.status(200).send(result);
+		res.send(result);
 		con.end();
 	});
 });

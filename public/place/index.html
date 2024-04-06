@@ -3,12 +3,36 @@
 <head>
   <title>place</title>
   <style>
-    /* Add your custom CSS styles here */
+    body {
+      background-color: lightgray;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      color: navy;
+      margin-bottom: 20px;
+    }
+
+    p {
+      color: darkblue;
+      margin-bottom: 10px;
+    }
+
+    canvas {
+      border: 1px solid black;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
   <h1>Place!</h1>
-  <p>Here is a 32x32 canvas for all of you. </p>
+  <p>Here is a 32x32 canvas for all of you. Select the color and draw it on the canvas!</p>
   <canvas id="canvas"></canvas>
   <p id="current">Selected color: White</p>
   <p id="timer">Drawing enabled</p>
