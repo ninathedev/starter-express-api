@@ -19,7 +19,8 @@
     "esm": "^3.2.25",
     "express": "^4.19.1",
     "geoip-lite": "^1.4.10",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "eslint": "^8.57.0"

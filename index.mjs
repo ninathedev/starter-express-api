@@ -6,11 +6,25 @@ import axios from 'axios';
 import express from 'express';
 import mysql from 'mysql';
 import geoip from 'geoip-lite';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+
+function generateClientId() {
+	return uuidv4();
+}
 const __dirname = path.resolve();
 
 const app = express();
 app.use(express.json());
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+let clients = [];
+let updates = [];
 
 app.get('/', (req, res) => {
 	res.sendFile('./public/mainPage/index.html', {root: __dirname});
@@ -362,7 +376,7 @@ const list = [{
 	colors: ['#FFFFFF']
 }];
 
-const currentPalette = 4;
+const currentPalette = 0;
 
 function rgbToHex(r, g, b) {
 	const hex = ((r << 16) | (g << 8) | b).toString(16).toUpperCase();
@@ -377,11 +391,54 @@ app.get('/place/palette', (req, res) => {
 	res.send(list[currentPalette]);
 });
 
+app.get('/place/events', (req, res) => {
+	const headers = {
+		'Content-Type': 'text/event-stream',
+		'Connection': 'keep-alive',
+		'Cache-Control': 'no-cache'
+	};
+	res.writeHead(200, headers);
+
+	const clientId = Date.now();
+
+	const newClient = {
+		id: clientId,
+		res
+	};
+
+	clients.push(newClient);
+
+	res.write(`data: ${JSON.stringify(updates)}\n\n`);
+
+	res.on('close', () => {
+		clients = clients.filter(client => client.id !== clientId);
+	});
+});
+
+function sendEventsToAll(newPixel) {
+	clients.forEach(client => client.res.write(`data: ${JSON.stringify(newPixel)}\n\n`));
+}
+
+let timers = {};
+
 app.patch('/place/draw', (req, res) => {
+	let clientIP = req.socket.remoteAddress;
+	if (timers[clientIP]) {
+		// Check if timer is still running
+		if (timers[clientIP] > Date.now()) {
+			res.status(401).send('Timer is still ongoing');
+			return;
+		} else {
+			// If timer has expired, delete the timer entry
+			delete timers[clientIP];
+		}
+	}
+
 	if (!list[currentPalette].colors.includes(rgbToHex(req.body.r, req.body.g, req.body.b))) {
 		res.status(403).send('Invalid color');
 		return;
 	}
+
 	const con = mysql.createConnection({
 		host: process.env.MYSQLIP,
 		user: process.env.MYSQLUSER,
@@ -396,10 +453,30 @@ app.patch('/place/draw', (req, res) => {
 			res.status(500).send(err);
 			return;
 		}
+		updates.push(req.body);
+		sendEventsToAll(req.body);
 		res.status(204).send(result);
 		con.end();
 	});
+
+	// Store the end time of the client-side timer
+	timers[clientIP] = Date.now() + 60000; // End time in milliseconds
 });
+
+app.get('/place/timer', (req, res) => {
+	const clientIP = req.socket.remoteAddress;
+	const endTime = timers[clientIP];
+
+	if (endTime && endTime > Date.now()) {
+		const remainingTime = Math.floor((endTime - Date.now()) / 1000); // Calculate remaining time
+		res.send({ time: remainingTime, serverTimerRunning: true });
+	} else {
+		// If timer has expired or doesn't exist, return 0 and serverTimerRunning false
+		res.send({ time: 0, serverTimerRunning: false });
+	}
+});
+
+
 
 app.get('/place/data', (req, res) => {
 	const con = mysql.createConnection({
@@ -415,10 +492,6 @@ app.get('/place/data', (req, res) => {
 		res.send(result);
 		con.end();
 	});
-});
-
-app.get('/place/events', (req, res) => {
-	res.sendFile('./public/place/events.html', {root: __dirname});
 });
 
 // Handle 404

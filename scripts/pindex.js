@@ -1,5 +1,4 @@
 let canvasData = [];
-let isDrawingEnabled = true;
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -22,7 +21,23 @@ fetch('/place/data')
 		console.error('Error fetching canvas data:', error);
 	});
 
-	
+// Create an EventSource connection to the server
+const eventSource = new EventSource('/place/events');
+// Handle incoming messages from the server
+eventSource.onmessage = (event) => {
+	const parsedData = JSON.parse(event.data);
+	drawPixel(parsedData.x, parsedData.y, parsedData.r, parsedData.g, parsedData.b, true);
+};
+
+// Handle connection errors
+eventSource.onerror = (error) => {
+	console.error('Error with EventSource connection:', error);
+};
+
+// Optional: Handle connection closure
+eventSource.onclose = () => {
+	console.log('EventSource connection closed');
+};
 
 function drawPixel(x, y, r, g, b, isLocal) {
 	isLocal = isLocal || false;
@@ -177,7 +192,56 @@ ctx.strokeStyle = 'black';
 ctx.lineWidth = 2;
 ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
-canvas.addEventListener('click',  (event) => {
+let isDrawingEnabled = true;
+const timerText = document.getElementById('timer');
+let timer = 0;
+
+// Function to start the countdown timer
+function startTimer(countdown) {
+	countdown = setInterval(() => {
+		timer--;
+		timerText.innerText = `Drawing disabled (${timer} seconds)`;
+
+		if (timer <= 0) {
+			clearInterval(countdown);
+			isDrawingEnabled = true;
+			timerText.innerText = 'Drawing enabled';
+		}
+	}, 1000); // 1 second interval
+}
+
+// Function to fetch server timer
+async function fetchServerTimer() {
+	try {
+		const response = await fetch('/place/timer');
+		const data = await response.json();
+		const serverTimer = data.time;
+		const serverTimerRunning = data.serverTimerRunning;
+
+		if (serverTimer === 0) {
+			isDrawingEnabled = true;
+			timerText.innerText = 'Drawing enabled';
+		} else {
+			timer = serverTimer; // Update timer with server timer value
+			timerText.innerText = `Drawing disabled (${timer} seconds)`;
+			startTimer(); // Start countdown
+		}
+
+		// If server timer is still running, continue polling
+		if (serverTimerRunning) {
+			setTimeout(fetchServerTimer, 500); // Polling interval of 500 milliseconds
+		}
+	} catch (error) {
+		console.error('Error fetching timer:', error);
+	}
+}
+
+// Start polling server timer
+fetchServerTimer();
+
+
+// Function to handle the canvas click event
+canvas.addEventListener('click', async (event) => {
 	if (!isDrawingEnabled) return;
 
 	const rect = canvas.getBoundingClientRect();
@@ -187,19 +251,30 @@ canvas.addEventListener('click',  (event) => {
 	drawPixel(x, y, r, g, b);
 
 	isDrawingEnabled = false;
-	let timer = 60; // 60 seconds
+	timer = 60; // Reset timer to 60 seconds
 
-	const timerText = document.getElementById('timer');
 	timerText.innerText = `Drawing disabled (${timer} seconds)`;
 
-	const countdown = setInterval(() => {
-		timer--;
-		timerText.innerText = `Drawing disabled (${timer} seconds)`;
+	try {
+		const response = await fetch('/place/timer');
+		const data = await response.json();
+		const serverTimer = data.time;
 
-		if (timer === 0) {
-			clearInterval(countdown);
+		if (serverTimer === 0) {
 			isDrawingEnabled = true;
 			timerText.innerText = 'Drawing enabled';
+		} else {
+			timer = serverTimer; // Update timer with server timer value
+			startTimer(); // Start countdown
 		}
-	}, 1000); // 1 second interval
+	} catch (error) {
+		console.error('Error fetching timer:', error);
+	}
 });
+
+// Initial check if timer is not 0
+if (timer <= 0) {
+	const timerText = document.getElementById('timer');
+	timerText.innerText = `Drawing disabled (${timer} seconds)`;
+	startTimer(); // Start countdown
+}
