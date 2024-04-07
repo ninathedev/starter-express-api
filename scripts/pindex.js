@@ -5,10 +5,11 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const pixelSize = 10;
-const canvasSize = 32;
+const canvasWidth = 35;
+const canvasHeight = 35;
 
-canvas.width = pixelSize * canvasSize;
-canvas.height = pixelSize * canvasSize;
+canvas.width = pixelSize * canvasWidth;
+canvas.height = pixelSize * canvasHeight;
 
 
 fetch('/place/data')
@@ -23,12 +24,10 @@ fetch('/place/data')
 
 	
 
-function drawPixel(x, y, r, g, b, isPrepare) {
-	isPrepare = isPrepare || false;
-	if (x < 0 || y < 0 || x >= canvasSize || y >= canvasSize) return;
-	ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-	ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-	if (!isPrepare) {
+function drawPixel(x, y, r, g, b, isLocal) {
+	isLocal = isLocal || false;
+	if (x < 0 || y < 0 || x >= canvasWidth || y >= canvasHeight) return;
+	if (!isLocal) {
 		const bodie = JSON.stringify({ x, y, r, g, b });
 		fetch('/place/draw', {
 			method: 'PATCH',
@@ -36,19 +35,29 @@ function drawPixel(x, y, r, g, b, isPrepare) {
 				'Content-Type': 'application/json',
 			},
 			body: bodie
+		}).then(response => {
+			if (response.ok) {
+				ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+				ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+				console.log('Pixel drawn successfully');
+			} else if (response.status === 403) {
+				alert('Invalid color; reloading page to fetch new palette');
+				location.reload();
+			} else if (response.status === 401) {
+				alert('If timer shown here is 0 seconds (most likely server and client timer mismatch), please wait for a few seconds before drawing again.');
+				return;
+			} else {
+				return response.json().then(data => {
+					throw new Error(data.error);
+				});
+			}
 		})
-			.then(response => {
-				if (response.ok) {
-					console.log('Pixel drawn successfully');
-				} else {
-					return response.json().then(data => {
-						throw new Error(data.error);
-					});
-				}
-			})
 			.catch(error => {
 				console.error('Error drawing pixel:', error.message);
 			});
+	} else {
+		ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+		ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
 	}
 }
 
@@ -81,11 +90,15 @@ function setPaletteColors() {
 		paletteContainer.style.display = 'flex';
 		document.body.appendChild(paletteContainer);
 
+		const numColors = paletteColors[0].colors.length;
+		const buttonSize = numColors === 32 ? '40px' : `${Math.floor(1280 / numColors)}px`;
+
 		for (const color of paletteColors[0].colors) {
 			const colorButton = document.createElement('button');
 			colorButton.style.backgroundColor = color;
-			colorButton.style.width = '40px';
+			colorButton.style.width = buttonSize;
 			colorButton.style.height = '40px';
+			colorButton.title = hexToName(color); // Set tooltip as the name of the color
 			colorButton.addEventListener('click', () => {
 				selectedColor = color;
 				document.getElementById('current').innerText = `Selected color: ${hexToName(selectedColor)}`;
