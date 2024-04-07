@@ -365,7 +365,7 @@ const list = [{
 const currentPalette = 4;
 
 function rgbToHex(r, g, b) {
-	const hex = ((r << 16) | (g << 8) | b).toString(16);
+	const hex = ((r << 16) | (g << 8) | b).toString(16).toUpperCase();
 	return '#' + hex.padStart(6, '0');
 }
 
