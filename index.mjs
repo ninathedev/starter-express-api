@@ -489,7 +489,11 @@ app.get('/place/data', (req, res) => {
 	const sql = 'SELECT * FROM place;';
 
 	con.query(sql, (err, result) => {
-		res.send(result);
+		if (err) {
+			res.status(500).send('Error retrieving data from database');
+		} else {
+			res.send(result);
+		}
 		con.end();
 	});
 });
