@@ -4,7 +4,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const pixelSize = 10;
-const canvasWidth = 35;
+const canvasWidth = 70;
 const canvasHeight = 35;
 
 canvas.width = pixelSize * canvasWidth;
@@ -192,63 +192,63 @@ ctx.strokeStyle = 'black';
 ctx.lineWidth = 2;
 ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
-// let isDrawingEnabled = true;
-// const timerText = document.getElementById('timer');
-// let timer = 0;
-// let clientTimerRunning = false; // Flag to track if client-side timer is running
+let isDrawingEnabled = true;
+const timerText = document.getElementById('timer');
+let timer = 0;
+let clientTimerRunning = false; // Flag to track if client-side timer is running
 
-// // Function to start the countdown timer
-// function startTimer() {
-// 	const countdown = setInterval(() => {
-// 		isDrawingEnabled = false;
-// 		timer--;
-// 		timerText.innerText = `Drawing disabled (${timer} seconds)`;
+// Function to start the countdown timer
+function startTimer() {
+	const countdown = setInterval(() => {
+		isDrawingEnabled = false;
+		timer--;
+		timerText.innerText = `Drawing disabled (${timer} seconds)`;
 
-// 		if (timer <= 0) {
-// 			clearInterval(countdown);
-// 			isDrawingEnabled = true;
-// 			timerText.innerText = 'Drawing enabled';
-// 			clientTimerRunning = false; // Reset client timer flag
-// 		}
-// 	}, 1000); // 1 second interval
-// }
+		if (timer <= 0) {
+			clearInterval(countdown);
+			isDrawingEnabled = true;
+			timerText.innerText = 'Drawing enabled';
+			clientTimerRunning = false; // Reset client timer flag
+		}
+	}, 1000); // 1 second interval
+}
 
-// // Function to fetch server timer and start client-side timer
-// async function fetchAndStartTimer() {
-// 	try {
-// 		const response = await fetch('/place/timer');
-// 		const data = await response.json();
-// 		const serverTimer = data.time;
+// Function to fetch server timer and start client-side timer
+async function fetchAndStartTimer() {
+	try {
+		const response = await fetch('/place/timer');
+		const data = await response.json();
+		const serverTimer = data.time;
 
-// 		if (serverTimer === 0) {
-// 			isDrawingEnabled = true;
-// 			timerText.innerText = 'Drawing enabled';
-// 			timer = 0; // Reset timer if server timer is not running
-// 			if (clientTimerRunning) {
-// 				clearInterval(clientTimerRunning); // Clear client timer if running
-// 				clientTimerRunning = false; // Reset client timer flag
-// 			}
-// 		} else {
-// 			timer = serverTimer; // Set timer with server timer value
-// 			timerText.innerText = `Drawing disabled (${timer} seconds)`;
-// 			if (!clientTimerRunning) {
-// 				startTimer(); // Start countdown only if client timer is not running
-// 				clientTimerRunning = true; // Set client timer flag
-// 			}
-// 		}
-// 	} catch (error) {
-// 		console.error('Error fetching timer:', error);
-// 	}
-// }
+		if (serverTimer === 0) {
+			isDrawingEnabled = true;
+			timerText.innerText = 'Drawing enabled';
+			timer = 0; // Reset timer if server timer is not running
+			if (clientTimerRunning) {
+				clearInterval(clientTimerRunning); // Clear client timer if running
+				clientTimerRunning = false; // Reset client timer flag
+			}
+		} else {
+			timer = serverTimer; // Set timer with server timer value
+			timerText.innerText = `Drawing disabled (${timer} seconds)`;
+			if (!clientTimerRunning) {
+				startTimer(); // Start countdown only if client timer is not running
+				clientTimerRunning = true; // Set client timer flag
+			}
+		}
+	} catch (error) {
+		console.error('Error fetching timer:', error);
+	}
+}
 
-// // Fetch server timer and start client-side timer
-// fetchAndStartTimer();
+// Fetch server timer and start client-side timer
+fetchAndStartTimer();
 
 
 
 // Function to handle the canvas click event
 canvas.addEventListener('click', async (event) => {
-	// if (!isDrawingEnabled) return;
+	if (!isDrawingEnabled) return;
 
 	const rect = canvas.getBoundingClientRect();
 	const x = Math.floor((event.clientX - rect.left) / pixelSize);
@@ -256,27 +256,27 @@ canvas.addEventListener('click', async (event) => {
 	const [r, g, b] = hexToRgb(selectedColor);
 	drawPixel(x, y, r, g, b);
 
-	// isDrawingEnabled = false;
-	// timer = 60; // Reset timer to 60 seconds
+	isDrawingEnabled = false;
+	timer = 60; // Reset timer to 60 seconds
 
-	// timerText.innerText = `Drawing disabled (${timer} seconds)`;
+	timerText.innerText = `Drawing disabled (${timer} seconds)`;
 
-	// try {
-	// 	const response = await fetch('/place/timer');
-	// 	const data = await response.json();
-	// 	const serverTimer = data.time;
+	try {
+		const response = await fetch('/place/timer');
+		const data = await response.json();
+		const serverTimer = data.time;
 
-	// 	if (serverTimer === 0) {
-	// 		isDrawingEnabled = true;
-	// 		timerText.innerText = 'Drawing enabled';
-	// 	} else {
-	// 		timer = serverTimer; // Update timer with server timer value
-	// 		if (!clientTimerRunning) {
-	// 			startTimer();
-	// 			clientTimerRunning = true;
-	// 		}
-	// 	}
-	// } catch (error) {
-	// 	console.error('Error fetching timer:', error);
-	// }
+		if (serverTimer === 0) {
+			isDrawingEnabled = true;
+			timerText.innerText = 'Drawing enabled';
+		} else {
+			timer = serverTimer; // Update timer with server timer value
+			if (!clientTimerRunning) {
+				startTimer();
+				clientTimerRunning = true;
+			}
+		}
+	} catch (error) {
+		console.error('Error fetching timer:', error);
+	}
 });

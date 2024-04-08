@@ -376,7 +376,7 @@ const list = [{
 	colors: ['#FFFFFF']
 }];
 
-const currentPalette = 0;
+const currentPalette = 1;
 
 function rgbToHex(r, g, b) {
 	const hex = ((r << 16) | (g << 8) | b).toString(16).toUpperCase();
@@ -464,16 +464,15 @@ app.patch('/place/draw', (req, res) => {
 });
 
 app.get('/place/timer', (req, res) => {
-	// const clientIP = req.socket.remoteAddress;
-	// const endTime = timers[clientIP];
+	const clientIP = req.socket.remoteAddress;
+	const endTime = timers[clientIP];
 
-	// if (endTime && endTime > Date.now()) {
-	// 	const remainingTime = Math.floor((endTime - Date.now()) / 1000); // Calculate remaining time
-	// 	res.send({ time: remainingTime, serverTimerRunning: true });
-	// } else {
-	// If timer has expired or doesn't exist, return 0 and serverTimerRunning false
-	res.send({ time: 0, serverTimerRunning: false });
-	//}
+	if (endTime && endTime > Date.now()) {
+		const remainingTime = Math.floor((endTime - Date.now()) / 1000); // Calculate remaining time
+		res.send({ time: remainingTime, serverTimerRunning: true });
+	} else {
+		res.send({ time: 0, serverTimerRunning: false });
+	}
 });
 
 
