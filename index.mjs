@@ -9,11 +9,7 @@ import geoip from 'geoip-lite';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
-
-function generateClientId() {
-	return uuidv4();
-}
+import rateLimit from 'express-rate-limit';
 const __dirname = path.resolve();
 
 const app = express();
@@ -31,16 +27,16 @@ app.get('/', (req, res) => {
 });
 
 app.get('/scripts/mindex.js', (req, res) => {
-	res.sendFile('./scripts/mindex.js', {root: __dirname});
+	res.sendFile('./public/scripts/mindex.js', {root: __dirname});
 });
 app.get('/scripts/aindex.js', (req, res) => {
-	res.sendFile('./scripts/aindex.js', {root: __dirname});
+	res.sendFile('./public/scripts/aindex.js', {root: __dirname});
 });
 app.get('/scripts/dindex.js', (req, res) => {
-	res.sendFile('./scripts/dindex.js', {root: __dirname});
+	res.sendFile('./public/scripts/dindex.js', {root: __dirname});
 });
 app.get('/scripts/pindex.js', (req, res) => {
-	res.sendFile('./scripts/pindex.js', {root: __dirname});
+	res.sendFile('./public/scripts/pindex.js', {root: __dirname});
 });
 
 app.get('/money', (req, res) => {
@@ -386,6 +382,15 @@ function rgbToHex(r, g, b) {
 app.get('/place', (req, res) => {
 	res.sendFile('./public/place/index.html', {root: __dirname});
 });
+
+const limiter = rateLimit({
+	windowMs: 60 * 1000, // 1 minute window
+	max: 10, // limit each IP to 10 requests per windowMs
+	message: 'Too many requests from this IP, please try again later'
+});
+
+// Apply rate limiter to all requests
+app.use('/place', limiter);
 
 app.get('/place/palette', (req, res) => {
 	res.send(list[currentPalette]);
