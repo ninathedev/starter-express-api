@@ -8,12 +8,8 @@ import mysql from 'mysql';
 import geoip from 'geoip-lite';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
-
-function generateClientId() {
-	return uuidv4();
-}
 const __dirname = path.resolve();
 
 const app = express();
@@ -421,6 +417,11 @@ function sendEventsToAll(newPixel) {
 
 let timers = {};
 
+const limiter = rateLimit({
+	windowMs: 59 * 1000, // 1 minute window
+	max: 10, // limit each IP to 10 requests per windowMs
+	message: 'Too many requests from this IP, please try again later'
+});
 app.patch('/place/draw', (req, res) => {
 	let clientIP = req.socket.remoteAddress;
 	if (timers[clientIP]) {
@@ -462,7 +463,7 @@ app.patch('/place/draw', (req, res) => {
 	// Store the end time of the client-side timer
 	timers[clientIP] = Date.now() + 60000; // End time in milliseconds
 });
-
+app.use('/place/draw', limiter);
 app.get('/place/timer', (req, res) => {
 	const clientIP = req.socket.remoteAddress;
 	const endTime = timers[clientIP];
