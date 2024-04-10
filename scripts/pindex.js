@@ -58,7 +58,7 @@ function drawPixel(x, y, r, g, b, isLocal) {
 			} else if (response.status === 403) {
 				alert('Invalid color; reloading page to fetch new palette');
 				location.reload();
-			} else if (response.status === 401) {
+			} else if (response.status === 401 || response.status === 429) {
 				alert('If timer shown here is 0 seconds (most likely server and client timer mismatch), please wait for a few seconds before drawing again.');
 				return;
 			} else {
