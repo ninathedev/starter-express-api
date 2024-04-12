@@ -372,7 +372,7 @@ const list = [{
 	colors: ['#FFFFFF']
 }];
 
-const currentPalette = 1;
+const currentPalette = 0;
 
 function rgbToHex(r, g, b) {
 	const hex = ((r << 16) | (g << 8) | b).toString(16).toUpperCase();
