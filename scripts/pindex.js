@@ -4,7 +4,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const pixelSize = 10;
-const canvasWidth = 70;
+const canvasWidth = 35;
 const canvasHeight = 35;
 
 canvas.width = pixelSize * canvasWidth;
