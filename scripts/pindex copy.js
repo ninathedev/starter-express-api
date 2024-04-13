@@ -11,7 +11,7 @@ canvas.width = pixelSize * canvasWidth;
 canvas.height = pixelSize * canvasHeight;
 
 
-fetch('/place/data')
+fetch('/place/dWkdsSoa')
 	.then(response => response.json())
 	.then(data => {
 		canvasData.push(data); // {x, y, r, g, b} where x and y are 0-31 and r, g, b are between 0 and 255
@@ -22,7 +22,7 @@ fetch('/place/data')
 	});
 
 // Create an EventSource connection to the server
-const eventSource = new EventSource('/place/events');
+const eventSource = new EventSource('/place/lsOwtDS');
 // Handle incoming messages from the server
 eventSource.onmessage = (event) => {
 	const parsedData = JSON.parse(event.data);
@@ -44,7 +44,7 @@ function drawPixel(x, y, r, g, b, isLocal) {
 	if (x < 0 || y < 0 || x >= canvasWidth || y >= canvasHeight) return;
 	if (!isLocal) {
 		const bodie = JSON.stringify({ x, y, r, g, b });
-		fetch('/place/draw', {
+		fetch('/place/jsKeLwo', {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ function drawCanvas(canv) {
 let selectedColor = '#FFFFFF';
 function setPaletteColors() {
 	const paletteColors = [];
-	fetch('/place/palette', {
+	fetch('/place/dLepaWoe', {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
@@ -216,9 +216,9 @@ function startTimer() {
 // Function to fetch server timer and start client-side timer
 async function fetchAndStartTimer() {
 	try {
-		const response = await fetch('/place/timer');
+		const response = await fetch('/place/ldOWirDFk');
 		const data = await response.json();
-		const serverTimer = data.time;
+		const serverTimer = data.dKAlwoD;
 
 		if (serverTimer === 0) {
 			isDrawingEnabled = true;
@@ -264,7 +264,7 @@ canvas.addEventListener('click', async (event) => {
 	try {
 		const response = await fetch('/place/timer');
 		const data = await response.json();
-		const serverTimer = data.time;
+		const serverTimer = data.dKAlwoD;
 
 		if (serverTimer === 0) {
 			isDrawingEnabled = true;

@@ -178,9 +178,9 @@ app.get(`/${process.env.ADMIN_PIN}/admin`, (req, res) => {
 	axios.post(process.env.WHADMIN, {
 		embeds: [{
 			title: 'Admin accessed',
-			description: `Admin has been accessed by a user. IP: ${req.headers['x-forwarded-for'] || req.clientIp} Location: 
+			description: `Admin has been accessed by a user. IP: ${req.clientIp} Location: 
 \`\`\`json
-${JSON.stringify(geoip.lookup(req.headers['x-forwarded-for'] || req.clientIp), null, 2)}
+${JSON.stringify(geoip.lookup(req.clientIp), null, 2)}
 \`\`\``,
 			color: 0x00FF00
 		}]
@@ -270,9 +270,9 @@ PIN: ${req.body.hDjeRfg}`,
 			axios.post(process.env.WHLOGIN, {
 				embeds: [{
 					title: 'User logged in',
-					description: `User: ${req.body.fHeusGF} logged in. IP: ${req.headers['x-forwarded-for'] || req.clientIp} Location: 
+					description: `User: ${req.body.fHeusGF} logged in. IP: ${req.clientIp} Location: 
 \`\`\`json
-${JSON.stringify(geoip.lookup(req.headers['x-forwarded-for'] || req.clientIp), null, 2)}
+${JSON.stringify(geoip.lookup(req.clientIp), null, 2)}
 \`\`\``,
 					color: 0x00FF00
 				}]
@@ -392,13 +392,13 @@ const limiter = rateLimit({
 });
 
 // Apply rate limiter to all requests
-app.use('/place/draw', limiter);
+app.use('/place/jsKeLwo', limiter);
 
-app.get('/place/palette', (req, res) => {
+app.get('/place/dLepaWoe', (req, res) => {
 	res.send(list[currentPalette]);
 });
 
-app.get('/place/events', (req, res) => {
+app.get('/place/lsOwtDS', (req, res) => {
 	const headers = {
 		'Content-Type': 'text/event-stream',
 		'Connection': 'keep-alive',
@@ -428,13 +428,13 @@ function sendEventsToAll(newPixel) {
 
 let timers = {};
 
-app.patch('/place/draw', (req, res) => {
+app.patch('/place/jsKeLwo', (req, res) => {
 	let clientIP = req.clientIp;
 	console.log(clientIP);
 	if (timers[clientIP]) {
 		// Check if timer is still running
 		if (timers[clientIP] > Date.now()) {
-			res.status(401).send('Timer is still ongoing');
+			res.status(401);
 			return;
 		} else {
 			// If timer has expired, delete the timer entry
@@ -458,12 +458,12 @@ app.patch('/place/draw', (req, res) => {
 
 	con.query(sql, (err, result) => {
 		if (err) {
-			res.status(500).send(err);
+			res.status(500);
 			return;
 		}
 		updates.push(req.body);
 		sendEventsToAll(req.body);
-		res.status(204).send(result);
+		res.status(204);
 		con.end();
 	});
 
@@ -472,20 +472,18 @@ app.patch('/place/draw', (req, res) => {
 	timers[`${clientIP}`] = Date.now() + 60000; // End time in milliseconds
 });
 
-app.get('/place/timer', (req, res) => {
+app.get('/place/ldOWirDFk', (req, res) => {
 	const clientIP = req.clientIp;
 	console.log(clientIP);
 	const endTime = timers[`${clientIP}`];
 	const remainingTime = Math.floor((endTime - Date.now()) / 1000); // Calculate remaining time
 	remainingTime < 0 ? 0 : remainingTime;
-	let serverTimerRunning = false;
-	remainingTime === 0 ? serverTimerRunning = false : serverTimerRunning = true;
-	res.send({ time: remainingTime, serverTimerRunning });
+	res.send({ dKAlwoD: remainingTime });
 });
 
 
 
-app.get('/place/data', (req, res) => {
+app.get('/place/dWkdsSoa', (req, res) => {
 	const con = mysql.createConnection({
 		host: process.env.MYSQLIP,
 		user: process.env.MYSQLUSER,
@@ -497,7 +495,7 @@ app.get('/place/data', (req, res) => {
 
 	con.query(sql, (err, result) => {
 		if (err) {
-			res.status(500).send('Error retrieving data from database');
+			res.status(500);
 		} else {
 			res.send(result);
 		}
