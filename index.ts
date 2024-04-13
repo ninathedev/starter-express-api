@@ -442,7 +442,7 @@ app.patch('/place/jsKeLwo', (req, res) => {
 		}
 	}
 
-	if (!list[currentPalette].colors.includes(rgbToHex(req.body.r, req.body.g, req.body.b))) {
+	if (!list[currentPalette].fKdjsleW.includes(rgbToHex(req.body.r, req.body.g, req.body.b))) {
 		res.status(403).send('Invalid color');
 		return;
 	}
