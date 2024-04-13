@@ -140,7 +140,7 @@ function setPaletteColors() {
 		const paletteContainer = document.createElement('div');
 		paletteContainer.style.display = 'flex';
 		document.body.appendChild(paletteContainer);
-
+		console.table(paletteColors);
 		const numColors = paletteColors[0].colors.length;
 		const buttonSize = numColors === 32 ? '40px' : `${Math.floor(1280 / numColors)}px`;
 
