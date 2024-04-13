@@ -4,7 +4,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const pixelSize = 10;
-const canvasWidth = 35;
+const canvasWidth = 70;
 const canvasHeight = 35;
 
 canvas.width = pixelSize * canvasWidth;
@@ -58,7 +58,7 @@ function drawPixel(x, y, r, g, b, isLocal) {
 			} else if (response.status === 403) {
 				alert('Invalid color; reloading page to fetch new palette');
 				location.reload();
-			} else if (response.status === 401 || response.status === 429) {
+			} else if (response.status === 401) {
 				alert('If timer shown here is 0 seconds (most likely server and client timer mismatch), please wait for a few seconds before drawing again.');
 				return;
 			} else {
@@ -261,6 +261,22 @@ canvas.addEventListener('click', async (event) => {
 
 	timerText.innerText = `Drawing disabled (${timer} seconds)`;
 
-	startTimer();
-	clientTimerRunning = true;
+	try {
+		const response = await fetch('/place/timer');
+		const data = await response.json();
+		const serverTimer = data.time;
+
+		if (serverTimer === 0) {
+			isDrawingEnabled = true;
+			timerText.innerText = 'Drawing enabled';
+		} else {
+			timer = serverTimer; // Update timer with server timer value
+			if (!clientTimerRunning) {
+				startTimer();
+				clientTimerRunning = true;
+			}
+		}
+	} catch (error) {
+		console.error('Error fetching timer:', error);
+	}
 });
