@@ -105,10 +105,10 @@ function setPaletteColors() {
 		paletteContainer.style.display = 'flex';
 		document.body.appendChild(paletteContainer);
 
-		const numColors = paletteColors[0].colors.length;
+		const numColors = paletteColors[0].fKdjsleW.length;
 		const buttonSize = numColors === 32 ? '40px' : `${Math.floor(1280 / numColors)}px`;
 
-		for (const color of paletteColors[0].colors) {
+		for (const color of paletteColors[0].fKdjsleW) {
 			const colorButton = document.createElement('button');
 			colorButton.style.backgroundColor = color;
 			colorButton.style.width = buttonSize;
