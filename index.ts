@@ -477,7 +477,7 @@ app.get('/place/ldOWirDFk', (req, res) => {
 	console.log(clientIP);
 	const endTime = timers[`${clientIP}`];
 	const remainingTime = Math.floor((endTime - Date.now()) / 1000); // Calculate remaining time
-	remainingTime < 0 ? 0 : remainingTime;
+	remainingTime <= 0 ? 0 : remainingTime;
 	res.send({ dKAlwoD: remainingTime });
 });
 

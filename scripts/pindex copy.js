@@ -262,7 +262,7 @@ canvas.addEventListener('click', async (event) => {
 	timerText.innerText = `Drawing disabled (${timer} seconds)`;
 
 	try {
-		const response = await fetch('/place/timer');
+		const response = await fetch('/place/ldOWirDFk');
 		const data = await response.json();
 		const serverTimer = data.dKAlwoD;
 
