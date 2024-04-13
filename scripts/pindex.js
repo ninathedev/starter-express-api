@@ -1,8 +1,3 @@
-for (let i = 0; i < 50; i++) {
-	console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-}
-
-
 let canvasData = [];
 
 const canvas = document.getElementById('canvas');
@@ -21,9 +16,6 @@ fetch('/place/data')
 	.then(data => {
 		canvasData.push(data); // {x, y, r, g, b} where x and y are 0-31 and r, g, b are between 0 and 255
 		drawCanvas(canvasData);
-		for (let i = 0; i < 50; i++) {
-			console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-		}		
 	})
 	.catch(error => {
 		console.error('Error fetching canvas data:', error);
@@ -33,14 +25,8 @@ fetch('/place/data')
 const eventSource = new EventSource('/place/events');
 // Handle incoming messages from the server
 eventSource.onmessage = (event) => {
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}	
 	const parsedData = JSON.parse(event.data);
 	drawPixel(parsedData.x, parsedData.y, parsedData.r, parsedData.g, parsedData.b, true);
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}	
 };
 
 // Handle connection errors
@@ -50,9 +36,7 @@ eventSource.onerror = (error) => {
 
 // Optional: Handle connection closure
 eventSource.onclose = () => {
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}	
+	console.log('EventSource connection closed');
 };
 
 function drawPixel(x, y, r, g, b, isLocal) {
@@ -70,28 +54,17 @@ function drawPixel(x, y, r, g, b, isLocal) {
 			if (response.ok) {
 				ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
 				ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-				for (let i = 0; i < 50; i++) {
-					console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-				}
+				console.log('Pixel drawn successfully');
 			} else if (response.status === 403) {
 				alert('Invalid color; reloading page to fetch new palette');
-				for (let i = 0; i < 50; i++) {
-					console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-				}
 				location.reload();
-			} else if (response.status === 401 || response.status === 429) {
+			} else if (response.status === 401) {
 				alert('If timer shown here is 0 seconds (most likely server and client timer mismatch), please wait for a few seconds before drawing again.');
-				for (let i = 0; i < 50; i++) {
-					console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-				}
 				return;
 			} else {
 				return response.json().then(data => {
 					throw new Error(data.error);
 				});
-			}
-			for (let i = 0; i < 50; i++) {
-				console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
 			}
 		})
 			.catch(error => {
@@ -104,26 +77,17 @@ function drawPixel(x, y, r, g, b, isLocal) {
 }
 
 function drawCanvas(canv) {
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}
 	if (!canv) return;
 
 	for (let i = 0; i < canv[0].length; i++) {
 		const { x, y, r, g, b } = canv[0][i];
 		drawPixel(x, y, r, g, b, true);
 	}
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}
 }
 
 
 let selectedColor = '#FFFFFF';
 function setPaletteColors() {
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}
 	const paletteColors = [];
 	fetch('/place/palette', {
 		method: 'GET',
@@ -140,6 +104,7 @@ function setPaletteColors() {
 		const paletteContainer = document.createElement('div');
 		paletteContainer.style.display = 'flex';
 		document.body.appendChild(paletteContainer);
+
 		const numColors = paletteColors[0].colors.length;
 		const buttonSize = numColors === 32 ? '40px' : `${Math.floor(1280 / numColors)}px`;
 
@@ -157,15 +122,9 @@ function setPaletteColors() {
 			paletteContainer.appendChild(colorButton);
 		}
 	}, 1000);
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}
 }
 
 function hexToName(hex) {
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}
 	const colors = {
 		'#FFFFFF': 'White',
 		'#E4E4E4': 'Light Gray',
@@ -215,23 +174,15 @@ function hexToName(hex) {
 		'#898D90': 'Silver',
 		'#D4D7D9': 'Light Silver',
 	};
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}
+
 	return colors[hex];
 }
 
 function hexToRgb(hex) {
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}
 	const bigint = parseInt(hex.slice(1), 16);
 	const r = (bigint >> 16) & 255;
 	const g = (bigint >> 8) & 255;
 	const b = bigint & 255;
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}
 	return [r, g, b];
 }
 setPaletteColors();
@@ -248,9 +199,6 @@ let clientTimerRunning = false; // Flag to track if client-side timer is running
 
 // Function to start the countdown timer
 function startTimer() {
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}
 	const countdown = setInterval(() => {
 		isDrawingEnabled = false;
 		timer--;
@@ -263,20 +211,11 @@ function startTimer() {
 			clientTimerRunning = false; // Reset client timer flag
 		}
 	}, 1000); // 1 second interval
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}
 }
 
 // Function to fetch server timer and start client-side timer
 async function fetchAndStartTimer() {
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}
 	try {
-		for (let i = 0; i < 50; i++) {
-			console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-		}
 		const response = await fetch('/place/timer');
 		const data = await response.json();
 		const serverTimer = data.time;
@@ -297,9 +236,6 @@ async function fetchAndStartTimer() {
 				clientTimerRunning = true; // Set client timer flag
 			}
 		}
-		for (let i = 0; i < 50; i++) {
-			console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-		}		
 	} catch (error) {
 		console.error('Error fetching timer:', error);
 	}
@@ -325,13 +261,26 @@ canvas.addEventListener('click', async (event) => {
 
 	timerText.innerText = `Drawing disabled (${timer} seconds)`;
 
-	startTimer();
-	clientTimerRunning = true;
-	for (let i = 0; i < 50; i++) {
-		console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
-	}	
+	try {
+		const response = await fetch('/place/timer');
+		const data = await response.json();
+		const serverTimer = data.time;
+
+		if (serverTimer === 0) {
+			isDrawingEnabled = true;
+			timerText.innerText = 'Drawing enabled';
+		} else {
+			timer = serverTimer; // Update timer with server timer value
+			if (!clientTimerRunning) {
+				startTimer();
+				clientTimerRunning = true;
+			}
+		}
+	} catch (error) {
+		console.error('Error fetching timer:', error);
+	}
 });
 
-for (let i = 0; i < 10000; i++) {
+for (let i = 0; i < 1000; i++) {
 	console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
 }	
