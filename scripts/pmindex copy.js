@@ -1,4 +1,5 @@
 const dkAjefK = '3d6287ff7aff3122b061cac786f05ea10c09be212d50c5db28ea7936b7852b95e3109594bef4cd1c3899765e3312b11c6d65539890e82d3d6959a0570c743e94';
+const djSJeld = '314159265358979323846';
 
 let canvasData = [];
 
@@ -42,25 +43,24 @@ eventSource.onclose = () => {
 };
 
 function drawPixel(x, y, r, g, b, isLocal) {
-	const modToken = document.getElementById('mod-token').value;
-	if (modToken !== dkAjefK) return;
 	isLocal = isLocal || false;
 	if (x < 0 || y < 0 || x >= canvasWidth || y >= canvasHeight) return;
 
-	const pixelWidth = parseInt(document.getElementById('pixel-width').value); // Get pixel width from HTML input
-	const pixelHeight = parseInt(document.getElementById('pixel-height').value); // Get pixel height from HTML input
-
-	const pixelDataArray = [];
-
-	// Construct pixel data array based on pixel width and height
-	for (let i = 0; i < pixelHeight; i++) {
-		for (let j = 0; j < pixelWidth; j++) {
-			const pixelData = { x: x + j, y: y + i, r, g, b, token: modToken };
-			pixelDataArray.push(pixelData);
-		}
-	}
-
 	if (!isLocal) {
+		const modToken = document.getElementById('mod-token').value;
+		if (modToken != djSJeld) return;
+		const pixelWidth = 1;
+		const pixelHeight = 1;
+
+		const pixelDataArray = [];
+
+		// Construct pixel data array based on pixel width and height
+		for (let i = 0; i < pixelHeight; i++) {
+			for (let j = 0; j < pixelWidth; j++) {
+				const pixelData = { x: x + j, y: y + i, r, g, b, token: dkAjefK };
+				pixelDataArray.push(pixelData);
+			}
+		}
 		const bodie = JSON.stringify(pixelDataArray);
 		fetch('/place/111710/jsKeLwo', {
 			method: 'PATCH',
@@ -70,6 +70,10 @@ function drawPixel(x, y, r, g, b, isLocal) {
 			body: bodie
 		}).then(response => {
 			if (response.ok) {
+				ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+				for (const pixelData of pixelDataArray) {
+					ctx.fillRect(pixelData.x * pixelSize, pixelData.y * pixelSize, pixelSize, pixelSize);
+				}
 				console.log('Pixels drawn successfully');
 			} else {
 				return response.json().then(data => {
@@ -87,7 +91,7 @@ function drawPixel(x, y, r, g, b, isLocal) {
 }
 
 function drawCanvas(canv) {
-	if (!canv) return;
+	console.log(canv);
 
 	for (let i = 0; i < canv[0].length; i++) {
 		const { x, y, r, g, b } = canv[0][i];
@@ -196,7 +200,7 @@ ctx.strokeRect(0, 0, canvas.width, canvas.height);
 // Function to handle the canvas click event
 canvas.addEventListener('click', async (event) => {
 	const modToken = document.getElementById('mod-token').value;
-	if (modToken !== dkAjefK) return;
+	if (modToken != djSJeld) return;
 	const rect = canvas.getBoundingClientRect();
 	const x = Math.floor((event.clientX - rect.left) / pixelSize);
 	const y = Math.floor((event.clientY - rect.top) / pixelSize);
