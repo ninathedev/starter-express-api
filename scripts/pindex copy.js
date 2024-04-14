@@ -282,5 +282,5 @@ canvas.addEventListener('click', async (event) => {
 });
 
 for (let i = 0; i < 1000; i++) {
-	console.warn("WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!");
+	console.warn('WARNING: Do not paste any code into the console! These can be super MALICIOUS!!!!');
 }	

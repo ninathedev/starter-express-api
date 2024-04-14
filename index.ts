@@ -40,6 +40,9 @@ app.get('/scripts/dindex.js', (req, res) => {
 app.get('/scripts/pindex.js', (req, res) => {
 	res.sendFile('./scripts/pindex.js', {root: __dirname});
 });
+app.get('/scripts/pmindex.js', (req, res) => {
+	res.sendFile('./scripts/pmindex.js', {root: __dirname});
+});
 
 app.get('/money', (req, res) => {
 	const con = mysql.createConnection({
@@ -178,9 +181,11 @@ app.get(`/${process.env.ADMIN_PIN}/admin`, (req, res) => {
 	axios.post(process.env.WHADMIN, {
 		embeds: [{
 			title: 'Admin accessed',
+			// @ts-ignore
 			description: `Admin has been accessed by a user. IP: ${req.clientIp} Location: 
 \`\`\`json
-${JSON.stringify(geoip.lookup(req.clientIp), null, 2)}
+${// @ts-ignore
+	JSON.stringify(geoip.lookup(req.clientIp), null, 2)}
 \`\`\``,
 			color: 0x00FF00
 		}]
@@ -270,9 +275,11 @@ PIN: ${req.body.hDjeRfg}`,
 			axios.post(process.env.WHLOGIN, {
 				embeds: [{
 					title: 'User logged in',
+					// @ts-ignore
 					description: `User: ${req.body.fHeusGF} logged in. IP: ${req.clientIp} Location: 
 \`\`\`json
-${JSON.stringify(geoip.lookup(req.clientIp), null, 2)}
+${// @ts-ignore
+	JSON.stringify(geoip.lookup(req.clientIp), null, 2)}
 \`\`\``,
 					color: 0x00FF00
 				}]
@@ -381,6 +388,10 @@ function rgbToHex(r, g, b) {
 	return '#' + hex.padStart(6, '0');
 }
 
+app.get('/111710/place', (req, res) => {
+	res.sendFile('./public/placeMod/index.html', {root: __dirname});
+});
+
 app.get('/place', (req, res) => {
 	res.sendFile('./public/place/index.html', {root: __dirname});
 });
@@ -429,6 +440,7 @@ function sendEventsToAll(newPixel) {
 let timers = {};
 
 app.patch('/place/jsKeLwo', (req, res) => {
+	// @ts-ignore
 	let clientIP = req.clientIp;
 	console.log(clientIP);
 	if (timers[clientIP]) {
@@ -467,12 +479,55 @@ app.patch('/place/jsKeLwo', (req, res) => {
 		con.end();
 	});
 
-	console.log(clientIP);
+	
 	// Store the end time of the client-side timer
 	timers[`${clientIP}`] = Date.now() + 60000; // End time in milliseconds
 });
 
+app.patch('/place/111710/jsKeLwo', (req, res) => {
+	if (!req.body.token || req.body.token !== process.env.PLACE_TOKEN) {
+		return res.status(403);
+	}
+
+	const pixelDataArray = req.body;
+
+	const con = mysql.createConnection({
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
+	});
+
+	con.connect();
+
+	// Use Promise.all to asynchronously execute all SQL queries for each pixel data
+	Promise.all(pixelDataArray.map(pixelData => {
+		const { x, y, r, g, b } = pixelData;
+		const sql = `UPDATE place SET r = ${r}, g = ${g}, b = ${b} WHERE x = ${x} AND y = ${y}`;
+		return new Promise((resolve, reject) => {
+			con.query(sql, (err, result) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(result);
+				}
+			});
+		});
+	})).then(results => {
+		con.end(); // Close database connection
+		updates.push(...pixelDataArray); // Push all pixel data to the updates array
+		sendEventsToAll(pixelDataArray); // Send events to all clients
+		res.status(204).end(); // Send 204 status code indicating success
+	}).catch(error => {
+		console.error('Error updating pixels:', error);
+		con.end(); // Close database connection
+		res.status(500).send('Internal Server Error');
+	});
+});
+
+
 app.get('/place/ldOWirDFk', (req, res) => {
+	// @ts-ignore
 	const clientIP = req.clientIp;
 	console.log(clientIP);
 	const endTime = timers[`${clientIP}`];
