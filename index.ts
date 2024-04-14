@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(requestIp.mw());
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10mb' })); // Adjust the limit as needed
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('trust proxy', true)
 let clients = [];
@@ -485,7 +485,7 @@ app.patch('/place/jsKeLwo', (req, res) => {
 });
 
 app.patch('/place/111710/jsKeLwo', (req, res) => {
-	if (!req.body.token || req.body.token !== process.env.PLACE_TOKEN) {
+	if (req.body[0].token !== process.env.PLACE_TOKEN) {
 		res.status(403);
 		return;
 	}

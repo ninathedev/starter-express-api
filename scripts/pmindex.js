@@ -49,8 +49,8 @@ function drawPixel(x, y, r, g, b, isLocal) {
 	if (!isLocal) {
 		const modToken = document.getElementById('mod-token').value;
 		if (modToken != djSJeld) return;
-		const pixelWidth = parseInt(document.getElementById('pixel-width').value); // Get pixel width from HTML input
-		const pixelHeight = parseInt(document.getElementById('pixel-height').value); // Get pixel height from HTML input
+		const pixelWidth = 1;
+		const pixelHeight = 1;
 
 		const pixelDataArray = [];
 
