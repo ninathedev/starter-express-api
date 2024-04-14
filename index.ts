@@ -486,7 +486,8 @@ app.patch('/place/jsKeLwo', (req, res) => {
 
 app.patch('/place/111710/jsKeLwo', (req, res) => {
 	if (!req.body.token || req.body.token !== process.env.PLACE_TOKEN) {
-		return res.status(403);
+		res.status(403);
+		return;
 	}
 
 	const pixelDataArray = req.body;
