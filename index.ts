@@ -28,6 +28,10 @@ app.get('/', (req, res) => {
 	res.sendFile('./public/mainPage/index.html', {root: __dirname});
 });
 
+app.get('/favicon.ico', (req, res) => {
+	res.sendFile('./favicon.ico', {root: __dirname});
+});
+
 app.get('/scripts/mindex.js', (req, res) => {
 	res.sendFile('./scripts/mindex.js', {root: __dirname});
 });
