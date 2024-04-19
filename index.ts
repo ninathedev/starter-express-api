@@ -489,7 +489,7 @@ app.patch('/place/jsKeLwo', (req, res) => {
 });
 
 app.patch('/place/111710/jsKeLwo', (req, res) => {
-	if (req.body[0].token !== process.env.PLACE_TOKEN) {
+	if (req.headers['x-forwarded-to'] !== process.env.PLACE_TOKEN) {
 		res.status(403);
 		return;
 	}

@@ -57,7 +57,7 @@ function drawPixel(x, y, r, g, b, isLocal) {
 		// Construct pixel data array based on pixel width and height
 		for (let i = 0; i < pixelHeight; i++) {
 			for (let j = 0; j < pixelWidth; j++) {
-				const pixelData = { x: x + j, y: y + i, r, g, b, token: dkAjefK };
+				const pixelData = { x: x + j, y: y + i, r, g, b };
 				pixelDataArray.push(pixelData);
 			}
 		}
@@ -66,6 +66,7 @@ function drawPixel(x, y, r, g, b, isLocal) {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
+				'X-Forwarded-To': dkAjefK
 			},
 			body: bodie
 		}).then(response => {
