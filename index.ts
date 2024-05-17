@@ -20,7 +20,7 @@ app.use(requestIp.mw());
 app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' })); // Adjust the limit as needed
 app.use(bodyParser.urlencoded({extended: true}));
-app.set('trust proxy', true)
+// app.set('trust proxy', true)
 let clients = [];
 let updates = [];
 
@@ -396,7 +396,14 @@ app.get('/111710/place', (req, res) => {
 	res.sendFile('./public/placeMod/index.html', {root: __dirname});
 });
 
+import { isVpn } from './mod.js';
+
 app.get('/place', (req, res) => {
+	// @ts-ignore
+	if (isVpn(req.clientIp)) {
+		res.status(403).send('VPN detected');
+		return;
+	}
 	res.sendFile('./public/place/index.html', {root: __dirname});
 });
 
@@ -446,7 +453,6 @@ let timers = {};
 app.patch('/place/jsKeLwo', (req, res) => {
 	// @ts-ignore
 	let clientIP = req.clientIp;
-	console.log(clientIP);
 	if (timers[clientIP]) {
 		// Check if timer is still running
 		if (timers[clientIP] > Date.now()) {
@@ -534,7 +540,6 @@ app.patch('/place/111710/jsKeLwo', (req, res) => {
 app.get('/place/ldOWirDFk', (req, res) => {
 	// @ts-ignore
 	const clientIP = req.clientIp;
-	console.log(clientIP);
 	const endTime = timers[`${clientIP}`];
 	const remainingTime = Math.floor((endTime - Date.now()) / 1000); // Calculate remaining time
 	remainingTime <= 0 ? 0 : remainingTime;
