@@ -410,7 +410,18 @@ app.get('/place', (req, res) => {
 const limiter = rateLimit({
 	windowMs: 60 * 1000, // 1 minute window
 	max: 10, // limit each IP to 10 requests per windowMs
-	message: 'Too many requests from this IP, please try again later'
+	message: 'Too many requests from this IP, please try again later',
+	// stops the error about trust proxy and stuff
+	validate: {trustProxy: false},
+	// if there is no IP, use the remote address.
+	// but if there is an IP, remove the port number
+	keyGenerator(request, _response): string {
+		if (!request.ip) {
+			console.error('Warning: request.ip is missing!')
+			return request.socket.remoteAddress
+		}
+		return request.ip.replace(/:\d+[^:]*$/, '')
+	}
 });
 
 // Apply rate limiter to all requests
