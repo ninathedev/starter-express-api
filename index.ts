@@ -20,7 +20,7 @@ app.use(requestIp.mw());
 app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' })); // Adjust the limit as needed
 app.use(bodyParser.urlencoded({extended: true}));
-// app.set('trust proxy', true)
+app.set('trust proxy', true)
 let clients = [];
 let updates = [];
 
