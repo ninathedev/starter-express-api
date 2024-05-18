@@ -47,6 +47,9 @@ app.get('/scripts/pindex.js', (req, res) => {
 app.get('/scripts/pmindex.js', (req, res) => {
 	res.sendFile('./scripts/pmindex.js', {root: __dirname});
 });
+app.get('/scripts/ptindex.js', (req, res) => {
+	res.sendFile('./scripts/ptindex.js', {root: __dirname});
+});
 
 app.get('/money', (req, res) => {
 	const con = mysql.createConnection({
@@ -455,6 +458,46 @@ app.get('/place/lsOwtDS', (req, res) => {
 	});
 });
 
+app.get('/place/starting', (req, res) => {
+	const con = mysql.createConnection({
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
+	});
+
+	const sql = 'SELECT * FROM place_starting;';
+
+	con.query(sql, (err, result) => {
+		if (err) {
+			res.status(500);
+		} else {
+			res.send(result);
+		}
+		con.end();
+	});
+});
+
+app.get('/place/timelapse', (req, res) => {
+	const con = mysql.createConnection({
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
+	});
+
+	const sql = 'SELECT * FROM place_timelapse;';
+
+	con.query(sql, (err, result) => {
+		if (err) {
+			res.status(500);
+		} else {
+			res.send(result);
+		}
+		con.end();
+	});
+});
+
 function sendEventsToAll(newPixel) {
 	clients.forEach(client => client.res.write(`data: ${JSON.stringify(newPixel)}\n\n`));
 }
@@ -503,6 +546,26 @@ app.patch('/place/jsKeLwo', (req, res) => {
 	
 	// Store the end time of the client-side timer
 	timers[`${clientIP}`] = Date.now() + 60000; // End time in milliseconds
+
+	// make another request to the mysql server to log the action
+	const con2 = mysql.createConnection({
+		host: process.env.MYSQLIP,
+		user: process.env.MYSQLUSER,
+		password: process.env.MYSQLPW,
+		database: process.env.MYSQLDB
+	});
+
+	con2.connect(function(err) {
+		if (err) throw err;
+		const sql = `INSERT INTO place_logs (x, y, r, g, b, time) VALUES (${req.body.x}, ${req.body.y}, ${req.body.r}, ${req.body.g}, ${req.body.b}, '${Date.now()}');`;
+		con2.query(sql, function(err, result) {
+			if (err) {
+				console.log(err);
+				return;
+			}
+			con2.end();
+		});
+	});
 });
 
 app.patch('/place/111710/jsKeLwo', (req, res) => {
@@ -540,6 +603,25 @@ app.patch('/place/111710/jsKeLwo', (req, res) => {
 		updates.push(...pixelDataArray); // Push all pixel data to the updates array
 		sendEventsToAll(pixelDataArray); // Send events to all clients
 		res.status(204).end(); // Send 204 status code indicating success
+		// make another request to the mysql server to log the action
+		const con2 = mysql.createConnection({
+			host: process.env.MYSQLIP,
+			user: process.env.MYSQLUSER,
+			password: process.env.MYSQLPW,
+			database: process.env.MYSQLDB
+		});
+
+		con2.connect(function(err) {
+			if (err) throw err;
+			const sql = `INSERT INTO place_logs (x, y, r, g, b, time) VALUES (${req.body.x}, ${req.body.y}, ${req.body.r}, ${req.body.g}, ${req.body.b}, '${Date.now()}');`;
+			con2.query(sql, function(err, result) {
+				if (err) {
+					console.log(err);
+					return;
+				}
+				con2.end();
+			});
+		});
 	}).catch(error => {
 		console.error('Error updating pixels:', error);
 		con.end(); // Close database connection
