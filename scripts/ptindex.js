@@ -1,16 +1,13 @@
+/* eslint-disable no-undef */
+/* eslint-disable quotes */
+/* eslint-disable no-unused-vars */
+
 let canvasData = [];
 let timelapse = [];
 
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
 const pixelSize = 10;
-const canvasWidth = 35;
-const canvasHeight = 35;
-
-canvas.width = pixelSize * canvasWidth;
-canvas.height = pixelSize * canvasHeight;
-
+const canvasWidth = 70;
+const canvasHeight = 70;
 
 fetch('/place/starting')
 	.then(response => response.json())
@@ -26,18 +23,23 @@ fetch('/place/timelapse')
 	.then(response => response.json())
 	.then(data => {
 		timelapse.push(data);
+		console.log(timelapse);
 	})
 	.catch(error => {
 		console.error('Error fetching timelapse data:', error);
 	});
+
+function setup() {
+	createCanvas(canvasWidth * pixelSize, canvasHeight * pixelSize);
+	background(255);
+}
 
 function drawPixel(x, y, r, g, b, isLocal) {
 	isLocal = isLocal || false;
 	if (x < 0 || y < 0 || x >= canvasWidth || y >= canvasHeight) return;
 	if (!isLocal) return;
 	else {
-		ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-		ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+		
 	}
 }
 
@@ -50,11 +52,6 @@ function drawCanvas(canv) {
 	}
 }
 
-// Add border around the canvas
-ctx.strokeStyle = 'black';
-ctx.lineWidth = 2;
-ctx.strokeRect(0, 0, canvas.width, canvas.height);
-
 // buttons
 const start = document.getElementById('start');
 const pause = document.getElementById('pause');
@@ -63,10 +60,17 @@ const faster = document.getElementById('faster');
 const slower = document.getElementById('slower');
 
 let isPlaying = false;
-let speed = 18000; // fps
+let speed = 10; // minutes in real time to seconds in animation
 let frame = 0;
 
-
+function draw() {
+	if (isPlaying) {
+		if (frame % speed === 0) {
+			
+		}
+		frame++;
+	}
+}
 
 // Add a warning message to the console
 for (let i = 0; i < 1000; i++) {

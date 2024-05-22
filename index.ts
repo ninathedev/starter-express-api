@@ -478,6 +478,10 @@ app.get('/place/starting', (req, res) => {
 	});
 });
 
+app.get('/place/vid', (req, res) => {
+	res.sendFile('./public/placeTimelapse/index.html', {root: __dirname});
+});
+
 app.get('/place/timelapse', (req, res) => {
 	const con = mysql.createConnection({
 		host: process.env.MYSQLIP,
@@ -492,6 +496,7 @@ app.get('/place/timelapse', (req, res) => {
 		if (err) {
 			res.status(500);
 		} else {
+			console.log(result);
 			res.send(result);
 		}
 		con.end();
